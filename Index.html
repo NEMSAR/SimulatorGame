@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Desafío: Mercado de Abasto</title>
+    <style>
+        :root {
+            --primary: #2e7d32;
+            --secondary: #c8e6c9;
+            --text: #333;
+            --bg: #f5f5f5;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            background-color: white;
+            border-radius: 12px;
+            padding: 30px;
+            max-width: 500px;
+            width: 100%;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        h1 {
+            color: var(--primary);
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        .question-container {
+            margin-bottom: 25px;
+        }
+        .question {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        .btn {
+            background-color: var(--secondary);
+            color: var(--text);
+            border: 2px solid var(--primary);
+            border-radius: 8px;
+            padding: 12px 15px;
+            margin: 8px 0;
+            width: 100%;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+        .btn:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+        .btn:disabled {
+            cursor: not-allowed;
+            opacity: 0.8;
+        }
+        .correct { background-color: #4caf50 !important; color: white !important; border-color: #4caf50 !important; }
+        .incorrect { background-color: #f44336 !important; color: white !important; border-color: #f44336 !important; }
+        #score-container {
+            display: none;
+            margin-top: 20px;
+        }
+        #progress {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Desafío: Mercado de Abasto 🍎🥬</h1>
+    
+    <div id="quiz-container">
+        <div id="progress">Pregunta 1 de 5</div>
+        <div class="question-container">
+            <div class="question" id="question-text">Cargando pregunta...</div>
+            <div id="options-container"></div>
+        </div>
+    </div>
+
+    <div id="score-container">
+        <h2>¡Capacitación Completada!</h2>
+        <p>Tu puntaje final es: <strong id="score-text"></strong></p>
+        <button class="btn" onclick="restartGame()" style="background-color: var(--primary); color: white;">Volver a jugar</button>
+    </div>
+</div>
+
+<script>
+    const questions = [
+        {
+            question: "¿Cuál es la función principal del mercado de abasto?",
+            options: [
+                "Conectar al productor con el comerciante minorista",
+                "Vender productos directamente al consumidor final",
+                "Producir frutas y hortalizas a gran escala"
+            ],
+            answer: 0
+        },
+        {
+            question: "¿Por qué son fundamentales las frutas y hortalizas en la alimentación?",
+            options: [
+                "Por su alto contenido en grasas saturadas",
+                "Porque aportan nutrientes esenciales como vitaminas, minerales, fibra y agua",
+                "Porque no requieren de lavado antes de su consumo"
+            ],
+            answer: 1
+        },
+        {
+            question: "En la recepción de la mercadería, ¿qué ocurre si el producto no cumple con los estándares mínimos?",
+            options: [
+                "Se vende a mayor precio por su rareza",
+                "Se mezcla con la mercadería de primera calidad",
+                "Puede ser rechazada o separada para otro destino"
+            ],
+            answer: 2
+        },
+        {
+            question: "Durante la etapa de clasificación, ¿cuál es el destino de la mercadería de tercera calidad?",
+            options: [
+                "Venta directa al público",
+                "Industria o descarte",
+                "Exportación a mercados internacionales"
+            ],
+            answer: 1
+        },
+        {
+            question: "En cuanto al almacenamiento, ¿qué productos necesitan refrigeración?",
+            options: [
+                "Banana y papa",
+                "Frutillas o uvas",
+                "Ninguna fruta necesita refrigeración"
+            ],
+            answer: 1
+        }
+    ];
+
+    let currentQuestion = 0;
+    let score = 0;
+
+    const questionText = document.getElementById("question-text");
+    const optionsContainer = document.getElementById("options-container");
+    const progressText = document.getElementById("progress");
+    const quizContainer = document.getElementById("quiz-container");
+    const scoreContainer = document.getElementById("score-container");
+    const scoreText = document.getElementById("score-text");
+
+    function loadQuestion() {
+        resetState();
+        const currentQ = questions[currentQuestion];
+        questionText.innerText = currentQ.question;
+        progressText.innerText = `Pregunta ${currentQuestion + 1} de ${questions.length}`;
+
+        currentQ.options.forEach((option, index) => {
+            const button = document.createElement("button");
+            button.innerText = option;
+            button.classList.add("btn");
+            button.addEventListener("click", () => selectAnswer(index));
+            optionsContainer.appendChild(button);
+        });
+    }
+
+    function resetState() {
+        while (optionsContainer.firstChild) {
+            optionsContainer.removeChild(optionsContainer.firstChild);
+        }
+    }
+
+    function selectAnswer(selectedIndex) {
+        const currentQ = questions[currentQuestion];
+        const buttons = optionsContainer.querySelectorAll(".btn");
+
+        buttons.forEach(btn => btn.disabled = true); // Disable all buttons
+
+        if (selectedIndex === currentQ.answer) {
+            buttons[selectedIndex].classList.add("correct");
+            score++;
+        } else {
+            buttons[selectedIndex].classList.add("incorrect");
+            buttons[currentQ.answer].classList.add("correct");
+        }
+
+        setTimeout(() => {
+            currentQuestion++;
+            if (currentQuestion < questions.length) {
+                loadQuestion();
+            } else {
+                showScore();
+            }
+        }, 1500); // Wait 1.5 seconds before next question
+    }
+
+    function showScore() {
+        quizContainer.style.display = "none";
+        scoreContainer.style.display = "block";
+        scoreText.innerText = `${score} de ${questions.length}`;
+    }
+
+    function restartGame() {
+        currentQuestion = 0;
+        score = 0;
+        quizContainer.style.display = "block";
+        scoreContainer.style.display = "none";
+        loadQuestion();
+    }
+
+    // Init game
+    loadQuestion();
+</script>
+
+</body>
+</html>
