@@ -3,13 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Desafío: Mercado de Abasto</title>
+    <title>Simulador: Inspector del Mercado</title>
     <style>
         :root {
-            --primary: #2e7d32;
-            --secondary: #c8e6c9;
+            --primary: #f57c00;
+            --secondary: #ffe0b2;
+            --success: #4caf50;
+            --danger: #f44336;
+            --info: #2196f3;
             --text: #333;
-            --bg: #f5f5f5;
+            --bg: #eceff1;
         }
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -28,195 +31,226 @@
             padding: 30px;
             max-width: 500px;
             width: 100%;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
             text-align: center;
         }
         h1 {
             color: var(--primary);
-            font-size: 24px;
-            margin-bottom: 20px;
+            font-size: 22px;
+            margin-bottom: 5px;
         }
-        .question-container {
+        p.subtitle {
+            color: #666;
+            font-size: 14px;
             margin-bottom: 25px;
         }
-        .question {
+        .card {
+            background-color: var(--secondary);
+            border: 2px dashed var(--primary);
+            border-radius: 10px;
+            padding: 30px 20px;
             font-size: 18px;
             font-weight: bold;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
+            min-height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
         }
         .btn {
-            background-color: var(--secondary);
+            background-color: white;
             color: var(--text);
-            border: 2px solid var(--primary);
+            border: 2px solid #ddd;
             border-radius: 8px;
-            padding: 12px 15px;
-            margin: 8px 0;
-            width: 100%;
+            padding: 15px 10px;
             cursor: pointer;
-            font-size: 16px;
-            transition: all 0.3s;
+            font-size: 14px;
+            font-weight: bold;
+            transition: all 0.2s;
         }
-        .btn:hover {
+        .btn:hover, .btn:active {
+            background-color: #f5f5f5;
+            transform: scale(0.98);
+        }
+        .feedback {
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 15px;
+            min-height: 25px;
+        }
+        .correct { color: var(--success); }
+        .incorrect { color: var(--danger); }
+        #end-screen { display: none; }
+        .btn-restart {
             background-color: var(--primary);
             color: white;
-        }
-        .btn:disabled {
-            cursor: not-allowed;
-            opacity: 0.8;
-        }
-        .correct { background-color: #4caf50 !important; color: white !important; border-color: #4caf50 !important; }
-        .incorrect { background-color: #f44336 !important; color: white !important; border-color: #f44336 !important; }
-        #score-container {
-            display: none;
+            border: none;
+            width: 100%;
             margin-top: 20px;
-        }
-        #progress {
-            font-size: 14px;
-            color: #666;
-            margin-bottom: 15px;
+            grid-column: span 2;
         }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1>Desafío: Mercado de Abasto 🍎🥬</h1>
-    
-    <div id="quiz-container">
-        <div id="progress">Pregunta 1 de 5</div>
-        <div class="question-container">
-            <div class="question" id="question-text">Cargando pregunta...</div>
-            <div id="options-container"></div>
+    <div id="game-screen">
+        <h1>🔍 Inspector de Abasto</h1>
+        <p class="subtitle" id="progress">Lote 1 de 6</p>
+        
+        <div class="card" id="item-card">
+            Cargando lote...
         </div>
+
+        <div class="actions" id="action-buttons">
+            <!-- Botones generados dinámicamente -->
+        </div>
+
+        <div class="feedback" id="feedback-text"></div>
     </div>
 
-    <div id="score-container">
-        <h2>¡Capacitación Completada!</h2>
-        <p>Tu puntaje final es: <strong id="score-text"></strong></p>
-        <button class="btn" onclick="restartGame()" style="background-color: var(--primary); color: white;">Volver a jugar</button>
+    <div id="end-screen">
+        <h1>¡Turno finalizado!</h1>
+        <p>Has clasificado todos los lotes.</p>
+        <h2 id="final-score"></h2>
+        <p id="final-message"></p>
+        <button class="btn btn-restart" onclick="startGame()">Volver a trabajar</button>
     </div>
 </div>
 
 <script>
-    const questions = [
+    // Base de datos de situaciones sacadas de la capacitación
+    const items = [
         {
-            question: "¿Cuál es la función principal del mercado de abasto?",
-            options: [
-                "Conectar al productor con el comerciante minorista",
-                "Vender productos directamente al consumidor final",
-                "Producir frutas y hortalizas a gran escala"
-            ],
-            answer: 0
+            text: "Llegan cajones de frutillas y uvas frescas.",
+            options: ["A la heladera (Refrigeración)", "Al galpón (Temp. Ambiente)"],
+            correct: 0,
+            explanation: "Las frutillas y uvas necesitan refrigeración."
         },
         {
-            question: "¿Por qué son fundamentales las frutas y hortalizas en la alimentación?",
-            options: [
-                "Por su alto contenido en grasas saturadas",
-                "Porque aportan nutrientes esenciales como vitaminas, minerales, fibra y agua",
-                "Porque no requieren de lavado antes de su consumo"
-            ],
-            answer: 1
+            text: "Llegan cajones de bananas y bolsas de papa.",
+            options: ["A la heladera (Refrigeración)", "Al galpón (Temp. Ambiente)"],
+            correct: 1,
+            explanation: "Se conservan mejor a temperatura ambiente."
         },
         {
-            question: "En la recepción de la mercadería, ¿qué ocurre si el producto no cumple con los estándares mínimos?",
-            options: [
-                "Se vende a mayor precio por su rareza",
-                "Se mezcla con la mercadería de primera calidad",
-                "Puede ser rechazada o separada para otro destino"
-            ],
-            answer: 2
+            text: "Lote de manzanas con tamaño perfecto, gran color y aptas para venta directa.",
+            options: ["Primera Calidad", "Tercera Calidad"],
+            correct: 0,
+            explanation: "La primera calidad es ideal para venta directa."
         },
         {
-            question: "Durante la etapa de clasificación, ¿cuál es el destino de la mercadería de tercera calidad?",
-            options: [
-                "Venta directa al público",
-                "Industria o descarte",
-                "Exportación a mercados internacionales"
-            ],
-            answer: 1
+            text: "Hortalizas con pequeños detalles, ideales para consumo inmediato o menor precio.",
+            options: ["Segunda Calidad", "Descarte"],
+            correct: 0,
+            explanation: "La segunda calidad es para consumo inmediato."
         },
         {
-            question: "En cuanto al almacenamiento, ¿qué productos necesitan refrigeración?",
-            options: [
-                "Banana y papa",
-                "Frutillas o uvas",
-                "Ninguna fruta necesita refrigeración"
-            ],
-            answer: 1
+            text: "Tomates muy golpeados y con signos de deterioro avanzado.",
+            options: ["Primera Calidad", "Tercera Calidad / Descarte"],
+            correct: 1,
+            explanation: "Van a industria o descarte por su mal estado."
+        },
+        {
+            text: "Llega un camión abierto, sucio y con mercadería expuesta al sol.",
+            options: ["Aceptar y descargar", "Rechazar mercadería"],
+            correct: 1,
+            explanation: "El transporte debe garantizar vehículos limpios y cerrados."
         }
     ];
 
-    let currentQuestion = 0;
+    let currentItem = 0;
     let score = 0;
+    let gameActive = true;
 
-    const questionText = document.getElementById("question-text");
-    const optionsContainer = document.getElementById("options-container");
-    const progressText = document.getElementById("progress");
-    const quizContainer = document.getElementById("quiz-container");
-    const scoreContainer = document.getElementById("score-container");
-    const scoreText = document.getElementById("score-text");
+    const itemCard = document.getElementById('item-card');
+    const actionButtons = document.getElementById('action-buttons');
+    const feedbackText = document.getElementById('feedback-text');
+    const progressText = document.getElementById('progress');
+    const gameScreen = document.getElementById('game-screen');
+    const endScreen = document.getElementById('end-screen');
+    const finalScore = document.getElementById('final-score');
+    const finalMessage = document.getElementById('final-message');
 
-    function loadQuestion() {
-        resetState();
-        const currentQ = questions[currentQuestion];
-        questionText.innerText = currentQ.question;
-        progressText.innerText = `Pregunta ${currentQuestion + 1} de ${questions.length}`;
-
-        currentQ.options.forEach((option, index) => {
-            const button = document.createElement("button");
-            button.innerText = option;
-            button.classList.add("btn");
-            button.addEventListener("click", () => selectAnswer(index));
-            optionsContainer.appendChild(button);
-        });
+    function startGame() {
+        currentItem = 0;
+        score = 0;
+        gameActive = true;
+        gameScreen.style.display = 'block';
+        endScreen.style.display = 'none';
+        feedbackText.innerText = '';
+        loadItem();
     }
 
-    function resetState() {
-        while (optionsContainer.firstChild) {
-            optionsContainer.removeChild(optionsContainer.firstChild);
+    function loadItem() {
+        if (currentItem >= items.length) {
+            endGame();
+            return;
         }
+
+        const item = items[currentItem];
+        itemCard.innerText = item.text;
+        progressText.innerText = `Lote ${currentItem + 1} de ${items.length}`;
+        feedbackText.innerText = '';
+        
+        actionButtons.innerHTML = '';
+        item.options.forEach((opt, index) => {
+            const btn = document.createElement('button');
+            btn.className = 'btn';
+            btn.innerText = opt;
+            btn.onclick = () => checkAnswer(index);
+            actionButtons.appendChild(btn);
+        });
+        
+        gameActive = true;
     }
 
-    function selectAnswer(selectedIndex) {
-        const currentQ = questions[currentQuestion];
-        const buttons = optionsContainer.querySelectorAll(".btn");
+    function checkAnswer(selectedIndex) {
+        if (!gameActive) return;
+        gameActive = false; // Prevenir múltiples clics
 
-        buttons.forEach(btn => btn.disabled = true); // Disable all buttons
+        const item = items[currentItem];
+        const buttons = actionButtons.children;
 
-        if (selectedIndex === currentQ.answer) {
-            buttons[selectedIndex].classList.add("correct");
+        if (selectedIndex === item.correct) {
+            buttons[selectedIndex].style.borderColor = "var(--success)";
+            buttons[selectedIndex].style.backgroundColor = "#e8f5e9";
+            feedbackText.innerHTML = `<span class="correct">¡Bien hecho!</span> ${item.explanation}`;
             score++;
         } else {
-            buttons[selectedIndex].classList.add("incorrect");
-            buttons[currentQ.answer].classList.add("correct");
+            buttons[selectedIndex].style.borderColor = "var(--danger)";
+            buttons[selectedIndex].style.backgroundColor = "#ffebee";
+            buttons[item.correct].style.borderColor = "var(--success)";
+            feedbackText.innerHTML = `<span class="incorrect">Error.</span> ${item.explanation}`;
         }
 
         setTimeout(() => {
-            currentQuestion++;
-            if (currentQuestion < questions.length) {
-                loadQuestion();
-            } else {
-                showScore();
-            }
-        }, 1500); // Wait 1.5 seconds before next question
+            currentItem++;
+            loadItem();
+        }, 3000); // Muestra la explicación por 3 segundos antes de pasar
     }
 
-    function showScore() {
-        quizContainer.style.display = "none";
-        scoreContainer.style.display = "block";
-        scoreText.innerText = `${score} de ${questions.length}`;
+    function endGame() {
+        gameScreen.style.display = 'none';
+        endScreen.style.display = 'block';
+        finalScore.innerText = `Puntaje: ${score} / ${items.length}`;
+        
+        if (score === items.length) {
+            finalMessage.innerText = "¡Excelente inspector! Dominás los procesos de recepción y clasificación a la perfección.";
+        } else if (score >= items.length / 2) {
+            finalMessage.innerText = "Buen trabajo, pero algunos lotes se te pasaron. ¡A seguir practicando!";
+        } else {
+            finalMessage.innerText = "Hubo muchas pérdidas por mala clasificación. Repasemos el manual y volvamos a intentarlo.";
+        }
     }
 
-    function restartGame() {
-        currentQuestion = 0;
-        score = 0;
-        quizContainer.style.display = "block";
-        scoreContainer.style.display = "none";
-        loadQuestion();
-    }
-
-    // Init game
-    loadQuestion();
+    // Iniciar el juego al cargar la página
+    startGame();
 </script>
 
 </body>
