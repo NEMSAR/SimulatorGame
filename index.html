@@ -3,597 +3,687 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>FOODCHECK | Control de Calidad</title>
+    <title>INOCUIDAD 360 // FOODCHECK</title>
     <style>
-        /* === VARIABLES PREMIUM === */
+        /* ==========================================================================
+           1. VARIABLES & ESTÉTICA "STREET-TECH / MOTION EDITORIAL"
+           ========================================================================== */
         :root {
-            --accent: #ff4757; /* Rojo elegante, inspirado en la imagen de referencia */
-            --accent-glow: rgba(255, 71, 87, 0.4);
-            --success: #2ed573;
-            --success-glow: rgba(46, 213, 115, 0.4);
-            --text-main: #f1f2f6;
-            --text-muted: #a4b0be;
-            --glass-bg: rgba(20, 20, 25, 0.65);
-            --glass-border: rgba(255, 255, 255, 0.08);
-            --glass-highlight: rgba(255, 255, 255, 0.15);
+            --bg-dark: #07110e;
+            --primary-green: #10b981;
+            --accent-yellow: #facc15;
+            --text-light: #f8fafc;
+            --text-dim: #94a3b8;
+            --glass-panel: rgba(13, 27, 22, 0.75);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --font-main: 'Impact', 'Arial Black', sans-serif;
+            --font-sec: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
         }
 
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
             -webkit-tap-highlight-color: transparent;
             user-select: none;
         }
 
-        /* === FONDO Y AMBIENTACIÓN === */
         body {
-            /* Fondo de alimentos oscuro y elegante simulando la referencia */
-            background: 
-                linear-gradient(to bottom, rgba(10, 10, 12, 0.7), rgba(10, 10, 12, 0.95)),
-                url('https://images.unsplash.com/photo-1498837167386-41801c402120?auto=format&fit=crop&q=80&w=1080') center/cover fixed;
-            color: var(--text-main);
+            background-color: var(--bg-dark);
+            /* Fondo con textura sutil y degradado dramático verde/amarillo inspirado en la referencia */
+            background-image: 
+                radial-gradient(circle at 50% 20%, rgba(16, 185, 129, 0.2) 0%, rgba(7, 17, 14, 0.95) 75%),
+                linear-gradient(to bottom, transparent 60%, rgba(0,0,0,0.8));
+            color: var(--text-light);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
-            overflow-x: hidden;
-            padding: 20px 15px;
-        }
-
-        /* Efecto de luz ambiental animada de fondo */
-        .ambient-light {
-            position: fixed;
-            top: 20%;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 300px;
-            height: 300px;
-            background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
-            border-radius: 50%;
-            filter: blur(40px);
-            z-index: -1;
-            animation: breathe 8s ease-in-out infinite alternate;
-        }
-
-        @keyframes breathe {
-            0% { opacity: 0.3; transform: translateX(-50%) scale(0.8); }
-            100% { opacity: 0.7; transform: translateX(-50%) scale(1.2); }
-        }
-
-        /* === PANEL PRINCIPAL GLASSMORPHISM === */
-        .glass-panel {
-            width: 100%;
-            max-width: 480px;
-            background: var(--glass-bg);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid var(--glass-border);
-            border-radius: 30px;
-            padding: 30px 20px;
-            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6), inset 0 1px 0 var(--glass-highlight);
-            display: flex;
-            flex-direction: column;
-            position: relative;
-            z-index: 1;
-            margin-bottom: 80px; /* Espacio para el FAB */
-        }
-
-        /* === HEADER Y LOGO === */
-        .header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        .logo-container {
-            display: flex;
             justify-content: center;
-            align-items: center;
-            height: 40px;
-            margin-bottom: 15px;
+            overflow-x: hidden;
+            padding: 20px 15px 70px 15px;
+            font-family: var(--font-sec);
         }
 
-        .logo-placeholder {
-            font-size: 22px;
-            font-weight: 300;
-            letter-spacing: 3px;
-            color: var(--text-main);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .logo-placeholder span {
-            color: var(--accent);
-            font-weight: bold;
-        }
-
-        .title {
-            font-size: 24px;
-            font-weight: 600;
-            line-height: 1.2;
-            margin-bottom: 8px;
-            background: linear-gradient(135deg, #fff 0%, #a4b0be 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+        /* Iluminación de fondo animada en bucle (Motion Glow) */
+        .motion-glow {
+            position: fixed;
+            top: 25%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 320px;
+            height: 320px;
+            background: radial-gradient(circle, rgba(250, 204, 21, 0.15) 0%, rgba(16, 185, 129, 0.1) 50%, transparent 70%);
+            filter: blur(50px);
+            z-index: -1;
+            animation: pulseGlow 6s infinite alternate ease-in-out;
         }
 
-        .subtitle {
-            font-size: 12px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            color: var(--accent);
-            font-weight: 600;
-            animation: pulseText 3s infinite;
+        @keyframes pulseGlow {
+            0% { transform: translate(-50%, -50%) scale(0.8); opacity: 0.5; }
+            100% { transform: translate(-50%, -50%) scale(1.3); opacity: 1; }
         }
 
-        @keyframes pulseText {
-            0%, 100% { opacity: 0.6; }
-            50% { opacity: 1; text-shadow: 0 0 10px var(--accent-glow); }
-        }
-
-        /* === VISTAS DE JUEGO === */
-        .game-view {
+        /* ==========================================================================
+           2. SISTEMA DE PANTALLAS Y TRANSICIONES PREMIUM
+           ========================================================================== */
+        .screen {
             display: none;
             width: 100%;
-            animation: fadeSlideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            max-width: 460px;
+            animation: screenEntry 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
 
-        .game-view.active { display: block; }
-
-        @keyframes fadeSlideUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+        .screen.active {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
-        /* === MÓDULO 1: MEMOTEST 3D === */
-        .memo-board {
+        @keyframes screenEntry {
+            0% { opacity: 0; transform: translateY(25px) scale(0.98); }
+            100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        /* ==========================================================================
+           3. PANTALLA DE INICIO (HOME): ESTILO MOTION GRÁFICO
+           ========================================================================== */
+        .logo-container {
+            height: 45px;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .logo-container img {
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+        .logo-fallback {
+            font-family: var(--font-main);
+            font-size: 24px;
+            letter-spacing: 2px;
+            color: var(--text-light);
+            text-transform: uppercase;
+        }
+        .logo-fallback span { color: var(--primary-green); }
+
+        /* Título Principal Monumental */
+        .hero-title-group {
+            text-align: center;
+            position: relative;
+            margin-bottom: 35px;
+        }
+
+        .hero-title {
+            font-family: var(--font-main);
+            font-size: 54px;
+            line-height: 0.9;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-light);
+            /* Sombra dura paralela estilo diseño gráfico editorial */
+            text-shadow: 4px 4px 0px #000, 8px 8px 20px rgba(0,0,0,0.8);
+            margin-bottom: 10px;
+        }
+
+        .hero-title .highlight {
+            color: var(--accent-yellow);
+            display: block;
+        }
+
+        /* Etiqueta flotante rotada en ángulo agresivo */
+        .hero-badge {
+            background-color: var(--accent-yellow);
+            color: #000;
+            font-family: var(--font-main);
+            font-size: 14px;
+            text-transform: uppercase;
+            padding: 6px 16px;
+            letter-spacing: 1px;
+            box-shadow: 5px 5px 0px rgba(0,0,0,0.9);
+            transform: rotate(-3deg);
+            display: inline-block;
+            animation: floatBadge 3s infinite ease-in-out alternate;
+        }
+
+        @keyframes floatBadge {
+            0% { transform: rotate(-3deg) translateY(0px); }
+            100% { transform: rotate(-1deg) translateY(-5px); }
+        }
+
+        /* Selector de Juegos */
+        .menu-cards {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .game-select-btn {
+            background: var(--glass-panel);
+            border: 1px solid var(--glass-border);
+            border-left: 6px solid var(--primary-green);
+            padding: 22px 20px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            text-align: left;
+            width: 100%;
+        }
+
+        .game-select-btn:active {
+            transform: scale(0.96) translateX(4px);
+            border-color: var(--accent-yellow);
+        }
+
+        .game-select-btn.yellow-mode {
+            border-left-color: var(--accent-yellow);
+        }
+
+        .btn-info h3 {
+            font-family: var(--font-main);
+            font-size: 22px;
+            letter-spacing: 1px;
+            color: var(--text-light);
+            margin-bottom: 4px;
+            text-transform: uppercase;
+        }
+
+        .btn-info p {
+            font-size: 13px;
+            color: var(--text-dim);
+            line-height: 1.3;
+        }
+
+        .btn-arrow {
+            font-size: 24px;
+            color: var(--text-light);
+            background: rgba(255,255,255,0.05);
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid var(--glass-border);
+        }
+
+        /* ==========================================================================
+           4. INTERFAZ DE JUEGO (COMÚN)
+           ========================================================================== */
+        .game-header {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 25px;
+            background: var(--glass-panel);
+            padding: 15px 20px;
+            border-radius: 16px;
+            border: 1px solid var(--glass-border);
+        }
+
+        .back-home-btn {
+            background: transparent;
+            border: none;
+            color: var(--accent-yellow);
+            font-family: var(--font-main);
+            font-size: 14px;
+            letter-spacing: 1px;
+            cursor: pointer;
+            text-transform: uppercase;
+        }
+
+        .game-mode-title {
+            font-family: var(--font-main);
+            font-size: 18px;
+            letter-spacing: 1px;
+            color: var(--text-light);
+            text-transform: uppercase;
+        }
+
+        /* TABLERO MEMOTEST */
+        .memo-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 12px;
-            perspective: 1200px;
+            width: 100%;
+            perspective: 1000px;
         }
 
-        .memo-card {
+        .card {
             width: 100%;
             aspect-ratio: 1 / 1.25;
             cursor: pointer;
             position: relative;
             transform-style: preserve-3d;
-            transition: transform 0.7s cubic-bezier(0.4, 0.2, 0.2, 1);
+            transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
 
-        .memo-card.flipped { transform: rotateY(180deg); }
-        .memo-card.matched {
-            transform: rotateY(180deg) scale(0.9);
-            opacity: 0.5;
-            pointer-events: none;
+        .card * { pointer-events: none; }
+        .card.flipped { transform: rotateY(180deg); }
+        .card.matched {
+            transform: rotateY(180deg) scale(0.88);
+            opacity: 0.4;
         }
 
         .card-face {
             position: absolute;
-            width: 100%;
-            height: 100%;
+            width: 100%; height: 100%;
             backface-visibility: hidden;
-            border-radius: 16px;
+            border-radius: 12px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             padding: 8px;
             text-align: center;
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.4);
         }
 
         .card-front {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid var(--glass-border);
-            box-shadow: inset 0 1px 0 var(--glass-highlight);
-            font-size: 28px;
-            transition: all 0.3s ease;
-        }
-
-        .memo-card:active .card-front {
-            background: rgba(255, 255, 255, 0.08);
+            background: linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
+            font-size: 26px;
         }
 
         .card-back {
-            background: linear-gradient(135deg, rgba(46, 213, 115, 0.1), rgba(46, 213, 115, 0.02));
-            border: 1px solid var(--success);
-            box-shadow: 0 0 15px var(--success-glow);
+            background: #13221c;
+            border-color: var(--primary-green);
             transform: rotateY(180deg);
             font-size: 11px;
-            font-weight: 600;
-            color: var(--text-main);
+            font-weight: 700;
+            color: var(--text-light);
         }
+        .card-back .icon { font-size: 24px; margin-bottom: 4px; }
 
-        .card-icon { font-size: 24px; margin-bottom: 6px; }
+        /* SIMULADOR INSPECTOR */
+        .insp-container { width: 100%; }
 
-        /* === MÓDULO 2: SIMULADOR PREMIUM === */
-        .insp-display {
-            background: rgba(0, 0, 0, 0.3);
+        .insp-box {
+            background: var(--glass-panel);
             border: 1px solid var(--glass-border);
             border-radius: 20px;
             padding: 40px 20px;
             text-align: center;
-            font-size: 17px;
-            font-weight: 400;
-            line-height: 1.5;
-            color: var(--text-main);
-            margin-bottom: 25px;
             position: relative;
-            box-shadow: inset 0 5px 15px rgba(0,0,0,0.5);
+            margin-bottom: 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.6);
         }
 
-        .insp-progress {
+        .insp-counter {
             position: absolute;
             top: -12px;
             left: 50%;
             transform: translateX(-50%);
-            background: var(--accent);
-            color: white;
-            font-size: 10px;
-            font-weight: bold;
-            padding: 4px 12px;
+            background: var(--accent-yellow);
+            color: #000;
+            font-family: var(--font-main);
+            font-size: 12px;
+            padding: 4px 14px;
             border-radius: 20px;
             letter-spacing: 1px;
-            box-shadow: 0 4px 10px var(--accent-glow);
         }
 
-        .insp-actions {
-            display: flex;
-            flex-direction: column;
+        .insp-question { font-size: 17px; line-height: 1.4; font-weight: 500; }
+
+        .insp-btn-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
             gap: 12px;
         }
 
-        .btn-action {
-            background: rgba(255, 255, 255, 0.05);
+        .action-btn {
+            background: rgba(255,255,255,0.06);
             border: 1px solid var(--glass-border);
-            border-radius: 16px;
-            padding: 16px;
-            font-size: 15px;
-            color: var(--text-main);
+            color: var(--text-light);
+            padding: 18px 10px;
+            border-radius: 14px;
+            font-weight: 700;
+            font-size: 14px;
             cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-            position: relative;
-            overflow: hidden;
+            transition: all 0.2s;
         }
 
-        .btn-action::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
-            transform: translateX(-100%);
-            transition: 0.5s;
-        }
-
-        .btn-action:active { transform: scale(0.97); }
+        .action-btn:active { transform: scale(0.95); background: rgba(255,255,255,0.12); }
 
         .insp-feedback {
-            margin-top: 20px;
+            margin-top: 18px;
             text-align: center;
             font-size: 13px;
             min-height: 40px;
-            color: var(--text-muted);
-            opacity: 0;
-            transition: opacity 0.3s;
+            color: var(--text-dim);
+            line-height: 1.3;
         }
-        .insp-feedback.show { opacity: 1; }
 
-        /* === PANTALLAS DE VICTORIA === */
-        .victory-screen {
-            display: none;
+        /* PANTALLA VICTORIA */
+        .win-box {
+            background: var(--glass-panel);
+            border: 1px solid var(--primary-green);
+            padding: 35px 25px;
+            border-radius: 24px;
             text-align: center;
-            padding: 20px 0;
-            animation: fadeSlideUp 0.6s;
+            width: 100%;
+            box-shadow: 0 0 40px rgba(16, 185, 129, 0.2);
         }
 
-        .victory-title {
-            font-size: 28px;
-            color: var(--success);
+        .win-title {
+            font-family: var(--font-main);
+            font-size: 36px;
+            color: var(--primary-green);
+            letter-spacing: 1px;
             margin-bottom: 10px;
-            text-shadow: 0 0 20px var(--success-glow);
         }
 
-        .btn-restart {
+        .restart-btn {
             margin-top: 25px;
-            padding: 16px 32px;
-            background: var(--text-main);
+            background: var(--accent-yellow);
             color: #000;
             border: none;
-            border-radius: 30px;
-            font-weight: 700;
-            font-size: 14px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            font-family: var(--font-main);
+            font-size: 16px;
+            padding: 16px 30px;
+            border-radius: 12px;
             cursor: pointer;
-            transition: all 0.3s;
-            box-shadow: 0 10px 20px rgba(255,255,255,0.15);
+            width: 100%;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            box-shadow: 0 8px 20px rgba(250, 204, 21, 0.3);
         }
 
-        .btn-restart:active { transform: translateY(2px); }
-
-        /* === BOTÓN FLOTANTE (FAB) === */
-        .fab {
+        /* ==========================================================================
+           5. BOTÓN FLOTANTE (FAB) & FOOTER
+           ========================================================================== */
+        .fab-switch {
             position: fixed;
-            bottom: 40px;
+            bottom: 45px;
             right: 20px;
-            width: 60px;
-            height: 60px;
-            border-radius: 30px;
-            background: rgba(20, 20, 25, 0.8);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border: 1px solid var(--glass-border);
-            color: var(--text-main);
-            box-shadow: 0 15px 25px rgba(0,0,0,0.5), inset 0 1px 0 var(--glass-highlight);
-            cursor: pointer;
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: var(--accent-yellow);
+            color: #000;
+            border: none;
+            font-size: 24px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 24px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.8);
+            cursor: pointer;
             z-index: 100;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: none; /* Oculto en el Home */
         }
+        .fab-switch:active { transform: scale(0.85) rotate(180deg); }
 
-        .fab:active { transform: scale(0.85) rotate(15deg); }
-
-        /* === FOOTER AGENCY === */
         footer {
             position: fixed;
-            bottom: 15px;
+            bottom: 12px;
             width: 100%;
             text-align: center;
             font-size: 11px;
-            color: rgba(255,255,255,0.3);
+            color: rgba(255, 255, 255, 0.35);
             letter-spacing: 1px;
-            z-index: 0;
+            z-index: 10;
         }
-
-        footer span {
-            color: rgba(255,255,255,0.6);
-            font-weight: 600;
-        }
+        footer span { color: rgba(255, 255, 255, 0.7); font-weight: 700; }
     </style>
 </head>
 <body>
 
-    <div class="ambient-light"></div>
+    <div class="motion-glow"></div>
 
-    <div class="glass-panel">
-        <header class="header">
-            <div class="logo-container">
-                <!-- INSERTA TU LOGO AQUÍ -->
-                <!-- <img src="TU_LOGO.png" alt="Logo" style="height: 100%;"> -->
-                <div class="logo-placeholder">FOOD<span>CHECK</span></div>
-            </div>
-            <h1 class="title">Control de Calidad</h1>
-            <div class="subtitle" id="module-title">Módulo: Memoria Visual</div>
-        </header>
+    <!-- PANTALLA 1: MENÚ DE INICIO (HOME) -->
+    <div id="screen-home" class="screen active">
+        <div class="logo-container">
+            <!-- Pega el enlace web (URL) directa de tu logo en el atributo src -->
+            <!-- <img src="URL_DE_TU_LOGO_AQUI.png" alt="Logo"> -->
+            <div class="logo-fallback">🔬 FOOD<span>CHECK</span></div>
+        </div>
 
-        <!-- VISTA 1: MEMOTEST 3D -->
-        <section id="view-memotest" class="game-view active">
-            <div class="memo-board" id="memo-board"></div>
-            <div class="victory-screen" id="memo-victory">
-                <h2 class="victory-title">¡Análisis Exitoso!</h2>
-                <p style="color: var(--text-muted);">Has emparejado correctamente los estándares del mercado.</p>
-                <button class="btn-restart" onclick="initMemotest()">Nuevo Análisis</button>
-            </div>
-        </section>
+        <div class="hero-title-group">
+            <h1 class="hero-title">
+                INOCUIDAD
+                <span class="highlight">360°</span>
+            </h1>
+            <div class="hero-badge">⚡ Capacitación Práctica ⚡</div>
+        </div>
 
-        <!-- VISTA 2: SIMULADOR INSPECTOR -->
-        <section id="view-inspector" class="game-view">
-            <div id="insp-gameplay">
-                <div class="insp-display" id="insp-display">
-                    <div class="insp-progress" id="insp-progress">LOTE 1/6</div>
-                    <span id="insp-text">Cargando muestra...</span>
+        <div class="menu-cards">
+            <button class="game-select-btn" onclick="goToGame('memo')">
+                <div class="btn-info">
+                    <h3>Memoria Visual</h3>
+                    <p>Empareja conceptos clave de conservación y calidad.</p>
                 </div>
-                <div class="insp-actions" id="insp-actions"></div>
-                <div class="insp-feedback" id="insp-feedback"></div>
-            </div>
-            <div class="victory-screen" id="insp-victory">
-                <h2 class="victory-title" style="color: var(--accent); text-shadow: 0 0 20px var(--accent-glow);">Turno Finalizado</h2>
-                <p id="insp-final-msg" style="color: var(--text-muted);"></p>
-                <button class="btn-restart" onclick="initInspector()">Siguiente Turno</button>
-            </div>
-        </section>
+                <div class="btn-arrow">→</div>
+            </button>
+
+            <button class="game-select-btn yellow-mode" onclick="goToGame('inspector')">
+                <div class="btn-info">
+                    <h3>Simulador Inspector</h3>
+                    <p>Clasifica la mercadería entrante en tiempo real.</p>
+                </div>
+                <div class="btn-arrow">→</div>
+            </button>
+        </div>
     </div>
 
-    <button class="fab" onclick="toggleGame()" title="Cambiar Módulo">
-        ⚗️
-    </button>
+    <!-- PANTALLA 2: JUEGO MEMOTEST -->
+    <div id="screen-memo" class="screen">
+        <div class="game-header">
+            <button class="back-home-btn" onclick="goToHome()">← Inicio</button>
+            <span class="game-mode-title">Memoria Visual</span>
+        </div>
+        <div class="memo-grid" id="memo-board"></div>
+    </div>
+
+    <!-- PANTALLA 3: SIMULADOR INSPECTOR -->
+    <div id="screen-inspector" class="screen">
+        <div class="game-header">
+            <button class="back-home-btn" onclick="goToHome()">← Inicio</button>
+            <span class="game-mode-title">Inspección Rápida</span>
+        </div>
+        <div class="insp-container">
+            <div class="insp-box">
+                <div class="insp-counter" id="insp-counter">LOTE 1/6</div>
+                <p class="insp-question" id="insp-question">Cargando...</p>
+            </div>
+            <div class="insp-btn-group" id="insp-options"></div>
+            <div class="insp-feedback" id="insp-feedback"></div>
+        </div>
+    </div>
+
+    <!-- PANTALLA 4: VICTORIA COMÚN -->
+    <div id="screen-win" class="screen">
+        <div class="win-box">
+            <h2 class="win-title">¡TURNO APROBADO!</h2>
+            <p style="color: var(--text-dim); font-size: 15px; margin-bottom: 10px;" id="win-message">Dominas los estándares del mercado.</p>
+            <button class="restart-btn" onclick="goToHome()">Volver al Menú Principal</button>
+        </div>
+    </div>
+
+    <!-- BOTÓN FLOTANTE (FAB) PARA ALTERNAR JUEGOS EN VIVO -->
+    <button class="fab-switch" id="fab" onclick="fastSwitch()" title="Cambiar Desafío">🔄</button>
 
     <footer>
         Powered by <span>NovaBit Media Agency</span>
     </footer>
 
     <script>
-        // --- CONTROLADOR DE MÓDULOS ---
-        let currentMode = 'memotest';
-        const viewMemo = document.getElementById('view-memotest');
-        const viewInsp = document.getElementById('view-inspector');
-        const moduleTitle = document.getElementById('module-title');
-        const ambient = document.querySelector('.ambient-light');
+        /* ==========================================================================
+           LÓGICA GENERAL Y NAVEGACIÓN
+           ========================================================================== */
+        const screens = {
+            home: document.getElementById('screen-home'),
+            memo: document.getElementById('screen-memo'),
+            inspector: document.getElementById('screen-inspector'),
+            win: document.getElementById('screen-win')
+        };
+        const fab = document.getElementById('fab');
+        let activeGame = null;
 
-        function toggleGame() {
-            if (currentMode === 'memotest') {
-                currentMode = 'inspector';
-                viewMemo.classList.remove('active');
-                viewInsp.classList.add('active');
-                moduleTitle.innerText = "Módulo: Inspección Rápida";
-                ambient.style.background = "radial-gradient(circle, var(--accent-glow) 0%, transparent 70%)";
-                initInspector();
+        function showScreen(key) {
+            Object.values(screens).forEach(s => s.classList.remove('active'));
+            screens[key].classList.add('active');
+            
+            // FAB solo visible cuando se está jugando
+            if (key === 'memo' || key === 'inspector') {
+                fab.style.display = 'flex';
+                activeGame = key;
             } else {
-                currentMode = 'memotest';
-                viewInsp.classList.remove('active');
-                viewMemo.classList.add('active');
-                moduleTitle.innerText = "Módulo: Memoria Visual";
-                ambient.style.background = "radial-gradient(circle, var(--success-glow) 0%, transparent 70%)";
-                initMemotest();
+                fab.style.display = 'none';
+                activeGame = null;
             }
         }
 
-        // --- LÓGICA MEMOTEST ---
-        // Basado en Documento: Capacitación. Frutas y hortalizas.docx
-        const memoData = [
+        function goToHome() { showScreen('home'); }
+
+        function goToGame(type) {
+            showScreen(type);
+            type === 'memo' ? startMemo() : startInspector();
+        }
+
+        function fastSwitch() {
+            if (activeGame === 'memo') goToGame('inspector');
+            else if (activeGame === 'inspector') goToGame('memo');
+        }
+
+        /* ==========================================================================
+           MÓDULO 1: MEMOTEST
+           ========================================================================== */
+        // Datos basados estrictamente en el documento adjunto
+        const memoPairs = [
             { id: 1, text: "Frutillas y Uvas", icon: "🍓" }, { id: 1, text: "Requieren Refrigeración", icon: "❄️" },
             { id: 2, text: "Banana o Papa", icon: "🍌" }, { id: 2, text: "Temperatura Ambiente", icon: "🌡️" },
             { id: 3, text: "Primera Calidad", icon: "⭐" }, { id: 3, text: "Apto Venta Directa", icon: "🛒" },
             { id: 4, text: "Tercera Calidad", icon: "⚠️" }, { id: 4, text: "Industria o Descarte", icon: "🗑️" },
             { id: 5, text: "Transporte", icon: "🚚" }, { id: 5, text: "Limpio y Cerrado", icon: "🧼" },
-            { id: 6, text: "Contaminación", icon: "🦠" }, { id: 6, text: "Afecta Producto Sano", icon: "❌" }
+            { id: 6, text: "Contaminación Cruzada", icon: "🦠" }, { id: 6, text: "Afecta a Productos Sanos", icon: "❌" }
         ];
 
-        let hasFlippedCard = false, lockBoard = false, firstCard, secondCard, memoMatches = 0;
+        let flipped = false, lock = false, c1 = null, c2 = null, matches = 0;
 
-        function initMemotest() {
+        function startMemo() {
             const board = document.getElementById('memo-board');
-            document.getElementById('memo-victory').style.display = 'none';
-            board.style.display = 'grid';
             board.innerHTML = '';
-            memoMatches = 0;
-            [hasFlippedCard, lockBoard, firstCard, secondCard] = [false, false, null, null];
+            matches = 0; [flipped, lock, c1, c2] = [false, false, null, null];
 
-            let shuffled = [...memoData].sort(() => Math.random() - 0.5);
-            
-            shuffled.forEach(data => {
+            let shuffled = [...memoPairs].sort(() => Math.random() - 0.5);
+            shuffled.forEach(item => {
                 const card = document.createElement('div');
-                card.classList.add('memo-card');
-                card.dataset.id = data.id;
+                card.className = 'card';
+                card.dataset.id = item.id;
                 card.innerHTML = `
-                    <div class="card-face card-front">🌿</div>
+                    <div class="card-face card-front">📦</div>
                     <div class="card-face card-back">
-                        <div class="card-icon">${data.icon}</div>
-                        <div>${data.text}</div>
+                        <div class="icon">${item.icon}</div>
+                        <div>${item.text}</div>
                     </div>
                 `;
-                card.addEventListener('click', flipCard);
+                card.onclick = handleCardClick;
                 board.appendChild(card);
             });
-            ambient.style.background = "radial-gradient(circle, var(--success-glow) 0%, transparent 70%)";
         }
 
-        function flipCard() {
-            if (lockBoard || this === firstCard) return;
+        function handleCardClick() {
+            if (lock || this === c1) return;
             this.classList.add('flipped');
-            if (!hasFlippedCard) {
-                hasFlippedCard = true;
-                firstCard = this;
-                return;
-            }
-            secondCard = this;
-            checkMemoMatch();
+            if (!flipped) { flipped = true; c1 = this; return; }
+            c2 = this; verifyMemo();
         }
 
-        function checkMemoMatch() {
-            let isMatch = firstCard.dataset.id === secondCard.dataset.id;
-            if (isMatch) {
+        function verifyMemo() {
+            if (c1.dataset.id === c2.dataset.id) {
                 setTimeout(() => {
-                    firstCard.classList.add('matched');
-                    secondCard.classList.add('matched');
-                    resetMemoBoard();
-                    memoMatches += 2;
-                    if (memoMatches === memoData.length) {
-                        document.getElementById('memo-board').style.display = 'none';
-                        document.getElementById('memo-victory').style.display = 'block';
-                    }
-                }, 500);
+                    c1.classList.add('matched'); c2.classList.add('matched');
+                    resetMemoState(); matches += 2;
+                    if (matches === memoPairs.length) finishGame("Emparejaste todos los criterios técnicos de abasto.");
+                }, 400);
             } else {
-                lockBoard = true;
+                lock = true;
                 setTimeout(() => {
-                    firstCard.classList.remove('flipped');
-                    secondCard.classList.remove('flipped');
-                    resetMemoBoard();
-                }, 1200);
+                    c1.classList.remove('flipped'); c2.classList.remove('flipped');
+                    resetMemoState();
+                }, 1000);
             }
         }
 
-        function resetMemoBoard() {
-            [hasFlippedCard, lockBoard] = [false, false];
-            [firstCard, secondCard] = [null, null];
-        }
+        function resetMemoState() { [flipped, lock, c1, c2] = [false, false, null, null]; }
 
-        // --- LÓGICA SIMULADOR ---
-        // Basado en Documento: Capacitación. Frutas y hortalizas.docx
-        const inspItems = [
-            { text: "Lote de frutillas y uvas recién recibidas en el abasto.", options: ["A Refrigeración", "A Temp. Ambiente"], correct: 0, exp: "Requieren refrigeración para conservar calidad." },
-            { text: "Lote de manzanas de tamaño homogéneo y color brillante.", options: ["Primera Calidad", "Tercera Calidad"], correct: 0, exp: "Clasifican para venta directa." },
-            { text: "Hortalizas con daños visibles o sobremaduración extrema.", options: ["Segunda Calidad", "Descarte o Industria"], correct: 1, exp: "La tercera calidad no es apta para venta directa." },
-            { text: "Llega transporte con mercadería; el camión está abierto y sucio.", options: ["Aceptar Carga", "Rechazar Carga"], correct: 1, exp: "El transporte debe ser limpio y cerrado." },
-            { text: "Se colocan verduras junto a frutas que liberan mucho etileno.", options: ["Correcto", "Incorrecto (Incompatible)"], correct: 1, exp: "Genera maduración acelerada y deterioro cruzado." },
-            { text: "Lote de bananas y papas ingresando al depósito.", options: ["A Refrigeración", "A Temp. Ambiente"], correct: 1, exp: "Se conservan mejor a temperatura ambiente." }
+        /* ==========================================================================
+           MÓDULO 2: INSPECTOR
+           ========================================================================== */
+        // Datos basados estrictamente en el documento adjunto
+        const inspScenarios = [
+            { q: "Llegan cajones de frutillas y uvas frescas.", opts: ["Refrigerar", "Galpón (Temp. Amb)"], ans: 0, exp: "Las frutillas y uvas necesitan refrigeración inmediata." },
+            { q: "Lote de hortalizas con pequeños daños físicos.", opts: ["1ra Calidad", "2da Calidad"], ans: 1, exp: "La segunda calidad es para consumo inmediato o menor precio." },
+            { q: "Tomates con descomposición avanzada y mal olor.", opts: ["Venta Minorista", "Industria / Descarte"], ans: 1, exp: "La tercera calidad va a industria o descarte directo." },
+            { q: "Llega un camión abierto, con polvo y mercadería al sol.", opts: ["Descargar", "Rechazar Carga"], ans: 1, exp: "El transporte debe ser cerrado y estar limpio." },
+            { q: "Almacenar frutas que liberan etileno junto a verduras sensibles.", opts: ["Correcto", "Evitar (Incompatible)"], ans: 1, exp: "Genera maduración prematura y pérdidas por deterioro." },
+            { q: "Cajones de bananas entrantes en la recepción.", opts: ["Refrigerar", "Galpón (Temp. Amb)"], ans: 1, exp: "La banana se conserva mejor a temperatura ambiente." }
         ];
 
-        let currentInsp = 0, inspScore = 0, inspActive = true;
+        let curStep = 0, inspPoints = 0, waiting = false;
 
-        function initInspector() {
-            document.getElementById('insp-gameplay').style.display = 'block';
-            document.getElementById('insp-victory').style.display = 'none';
-            currentInsp = 0;
-            inspScore = 0;
-            loadInspItem();
+        function startInspector() {
+            curStep = 0; inspPoints = 0; waiting = false;
+            renderInspectorStep();
         }
 
-        function loadInspItem() {
-            if (currentInsp >= inspItems.length) {
-                endInspector();
+        function renderInspectorStep() {
+            if (curStep >= inspScenarios.length) {
+                finishGame(`Inspección finalizada con ${inspPoints}/${inspScenarios.length} decisiones acertadas.`);
                 return;
             }
-            const item = inspItems[currentInsp];
-            document.getElementById('insp-text').innerText = item.text;
-            document.getElementById('insp-progress').innerText = `LOTE ${currentInsp + 1}/${inspItems.length}`;
-            
-            const feedback = document.getElementById('insp-feedback');
-            feedback.classList.remove('show');
-            
-            const actionsDiv = document.getElementById('insp-actions');
-            actionsDiv.innerHTML = '';
-            item.options.forEach((opt, index) => {
+            const s = inspScenarios[curStep];
+            document.getElementById('insp-counter').innerText = `LOTE ${curStep + 1}/${inspScenarios.length}`;
+            document.getElementById('insp-question').innerText = s.q;
+            document.getElementById('insp-feedback').innerText = '';
+
+            const optsDiv = document.getElementById('insp-options');
+            optsDiv.innerHTML = '';
+            s.opts.forEach((text, i) => {
                 const btn = document.createElement('button');
-                btn.className = 'btn-action';
-                btn.innerText = opt;
-                btn.onclick = () => checkInspAnswer(index, btn);
-                actionsDiv.appendChild(btn);
+                btn.className = 'action-btn';
+                btn.innerText = text;
+                btn.onclick = () => solveScenario(i, btn);
+                optsDiv.appendChild(btn);
             });
-            inspActive = true;
+            waiting = false;
         }
 
-        function checkInspAnswer(index, btnSelected) {
-            if (!inspActive) return;
-            inspActive = false;
-            
-            const item = inspItems[currentInsp];
-            const btns = document.querySelectorAll('.btn-action');
-            const feedback = document.getElementById('insp-feedback');
+        function solveScenario(choice, btn) {
+            if (waiting) return; waiting = true;
+            const s = inspScenarios[curStep];
+            const fb = document.getElementById('insp-feedback');
 
-            if (index === item.correct) {
-                btnSelected.style.background = "rgba(46, 213, 115, 0.2)";
-                btnSelected.style.borderColor = "var(--success)";
-                feedback.innerHTML = `<span style="color:var(--success)">✓ Criterio Aprobado:</span> ${item.exp}`;
-                inspScore++;
+            if (choice === s.ans) {
+                btn.style.borderColor = "var(--primary-green)";
+                btn.style.background = "rgba(16, 185, 129, 0.2)";
+                fb.innerHTML = `<span style="color:var(--primary-green)">✓ Correcto:</span> ${s.exp}`;
+                inspPoints++;
             } else {
-                btnSelected.style.background = "rgba(255, 71, 87, 0.2)";
-                btnSelected.style.borderColor = "var(--accent)";
-                btns[item.correct].style.borderColor = "var(--success)";
-                feedback.innerHTML = `<span style="color:var(--accent)">✗ Criterio Rechazado:</span> ${item.exp}`;
+                btn.style.borderColor = "#ef4444";
+                btn.style.background = "rgba(239, 68, 68, 0.2)";
+                fb.innerHTML = `<span style="color:#ef4444">✗ Error:</span> ${s.exp}`;
             }
-            
-            feedback.classList.add('show');
 
-            setTimeout(() => {
-                currentInsp++;
-                loadInspItem();
-            }, 3000);
+            setTimeout(() => { curStep++; renderInspectorStep(); }, 2600);
         }
 
-        function endInspector() {
-            document.getElementById('insp-gameplay').style.display = 'none';
-            document.getElementById('insp-victory').style.display = 'block';
-            document.getElementById('insp-final-msg').innerText = `Precisión: ${inspScore} de ${inspItems.length} lotes clasificados con éxito.`;
+        function finishGame(msg) {
+            document.getElementById('win-message').innerText = msg;
+            showScreen('win');
         }
-
-        // Iniciar
-        initMemotest();
     </script>
 </body>
 </html>
