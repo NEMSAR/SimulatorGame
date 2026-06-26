@@ -3,142 +3,171 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Sistema de Control de Inocuidad</title>
+    <title>FOODCHECK | Control de Calidad</title>
     <style>
-        /* ESTÉTICA CLEAN LAB / CIENTÍFICA */
+        /* === VARIABLES PREMIUM === */
         :root {
-            --bg-app: #f4f7f6;
-            --surface: #ffffff;
-            --primary: #0284c7; /* Azul Médico/Científico */
-            --primary-light: #e0f2fe;
-            --success: #10b981; /* Verde Bioseguridad */
-            --success-light: #d1fae5;
-            --danger: #ef4444; /* Rojo Alerta */
-            --danger-light: #fee2e2;
-            --text-dark: #1e293b;
-            --text-muted: #64748b;
-            --border: #e2e8f0;
-            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+            --accent: #ff4757; /* Rojo elegante, inspirado en la imagen de referencia */
+            --accent-glow: rgba(255, 71, 87, 0.4);
+            --success: #2ed573;
+            --success-glow: rgba(46, 213, 115, 0.4);
+            --text-main: #f1f2f6;
+            --text-muted: #a4b0be;
+            --glass-bg: rgba(20, 20, 25, 0.65);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --glass-highlight: rgba(255, 255, 255, 0.15);
         }
 
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            -webkit-user-select: none;
+            font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+            -webkit-tap-highlight-color: transparent;
             user-select: none;
         }
 
+        /* === FONDO Y AMBIENTACIÓN === */
         body {
-            background-color: var(--bg-app);
-            color: var(--text-dark);
+            /* Fondo de alimentos oscuro y elegante simulando la referencia */
+            background: 
+                linear-gradient(to bottom, rgba(10, 10, 12, 0.7), rgba(10, 10, 12, 0.95)),
+                url('https://images.unsplash.com/photo-1498837167386-41801c402120?auto=format&fit=crop&q=80&w=1080') center/cover fixed;
+            color: var(--text-main);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
             overflow-x: hidden;
+            padding: 20px 15px;
         }
 
-        /* HEADER & LOGO */
-        header {
+        /* Efecto de luz ambiental animada de fondo */
+        .ambient-light {
+            position: fixed;
+            top: 20%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+            border-radius: 50%;
+            filter: blur(40px);
+            z-index: -1;
+            animation: breathe 8s ease-in-out infinite alternate;
+        }
+
+        @keyframes breathe {
+            0% { opacity: 0.3; transform: translateX(-50%) scale(0.8); }
+            100% { opacity: 0.7; transform: translateX(-50%) scale(1.2); }
+        }
+
+        /* === PANEL PRINCIPAL GLASSMORPHISM === */
+        .glass-panel {
             width: 100%;
-            background: var(--surface);
-            padding: 20px;
-            text-align: center;
-            border-bottom: 1px solid var(--border);
-            box-shadow: var(--shadow);
-            z-index: 10;
-        }
-
-        .logo-container {
-            margin-bottom: 10px;
-            height: 50px; /* Ajusta la altura según tu logo */
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .logo-container img {
-            max-height: 100%;
-            object-fit: contain;
-        }
-
-        /* Puedes poner el logo como texto provisorio si el link está vacío */
-        .logo-placeholder {
-            font-size: 20px;
-            font-weight: 800;
-            color: var(--primary);
-            letter-spacing: 1px;
-        }
-
-        h1 {
-            font-size: 18px;
-            font-weight: 700;
-            color: var(--text-dark);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .module-badge {
-            display: inline-block;
-            background: var(--primary-light);
-            color: var(--primary);
-            font-size: 11px;
-            font-weight: 700;
-            padding: 4px 10px;
-            border-radius: 12px;
-            margin-top: 5px;
-            text-transform: uppercase;
-        }
-
-        /* CONTENEDOR PRINCIPAL */
-        main {
-            flex: 1;
-            width: 100%;
-            max-width: 500px;
-            padding: 20px;
+            max-width: 480px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 30px;
+            padding: 30px 20px;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6), inset 0 1px 0 var(--glass-highlight);
             display: flex;
             flex-direction: column;
             position: relative;
+            z-index: 1;
+            margin-bottom: 80px; /* Espacio para el FAB */
         }
 
+        /* === HEADER Y LOGO === */
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .logo-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 40px;
+            margin-bottom: 15px;
+        }
+
+        .logo-placeholder {
+            font-size: 22px;
+            font-weight: 300;
+            letter-spacing: 3px;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .logo-placeholder span {
+            color: var(--accent);
+            font-weight: bold;
+        }
+
+        .title {
+            font-size: 24px;
+            font-weight: 600;
+            line-height: 1.2;
+            margin-bottom: 8px;
+            background: linear-gradient(135deg, #fff 0%, #a4b0be 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .subtitle {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--accent);
+            font-weight: 600;
+            animation: pulseText 3s infinite;
+        }
+
+        @keyframes pulseText {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; text-shadow: 0 0 10px var(--accent-glow); }
+        }
+
+        /* === VISTAS DE JUEGO === */
         .game-view {
             display: none;
             width: 100%;
-            animation: fadeIn 0.4s ease-out;
+            animation: fadeSlideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
 
-        .game-view.active {
-            display: block;
-        }
+        .game-view.active { display: block; }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
+        @keyframes fadeSlideUp {
+            from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* ESTILOS: MÓDULO MEMORIA (MEMOTEST) */
+        /* === MÓDULO 1: MEMOTEST 3D === */
         .memo-board {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 12px;
-            perspective: 1000px;
+            perspective: 1200px;
         }
 
         .memo-card {
             width: 100%;
-            aspect-ratio: 1 / 1.2;
+            aspect-ratio: 1 / 1.25;
             cursor: pointer;
             position: relative;
             transform-style: preserve-3d;
-            transition: transform 0.5s cubic-bezier(0.4, 0.0, 0.2, 1);
+            transition: transform 0.7s cubic-bezier(0.4, 0.2, 0.2, 1);
         }
 
         .memo-card.flipped { transform: rotateY(180deg); }
         .memo-card.matched {
-            transform: rotateY(180deg) scale(0.95);
-            opacity: 0.6;
+            transform: rotateY(180deg) scale(0.9);
+            opacity: 0.5;
+            pointer-events: none;
         }
 
         .card-face {
@@ -146,205 +175,232 @@
             width: 100%;
             height: 100%;
             backface-visibility: hidden;
-            border-radius: 8px;
+            border-radius: 16px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 10px;
+            padding: 8px;
             text-align: center;
-            box-shadow: var(--shadow);
         }
 
         .card-front {
-            background: var(--surface);
-            border: 2px solid var(--primary-light);
-            color: var(--primary);
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--glass-border);
+            box-shadow: inset 0 1px 0 var(--glass-highlight);
             font-size: 28px;
+            transition: all 0.3s ease;
+        }
+
+        .memo-card:active .card-front {
+            background: rgba(255, 255, 255, 0.08);
         }
 
         .card-back {
-            background: var(--surface);
-            border: 2px solid var(--success);
+            background: linear-gradient(135deg, rgba(46, 213, 115, 0.1), rgba(46, 213, 115, 0.02));
+            border: 1px solid var(--success);
+            box-shadow: 0 0 15px var(--success-glow);
             transform: rotateY(180deg);
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 600;
-            color: var(--text-dark);
+            color: var(--text-main);
         }
 
-        .card-icon { font-size: 24px; margin-bottom: 5px; }
+        .card-icon { font-size: 24px; margin-bottom: 6px; }
 
-        /* ESTILOS: MÓDULO INSPECTOR (SIMULADOR) */
-        .insp-progress {
-            text-align: center;
-            font-size: 13px;
-            color: var(--text-muted);
-            margin-bottom: 15px;
-            font-weight: 600;
-        }
-
+        /* === MÓDULO 2: SIMULADOR PREMIUM === */
         .insp-display {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 30px 20px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 40px 20px;
             text-align: center;
-            font-size: 16px;
-            font-weight: 600;
-            color: var(--text-dark);
-            box-shadow: var(--shadow);
-            min-height: 120px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 20px;
+            font-size: 17px;
+            font-weight: 400;
+            line-height: 1.5;
+            color: var(--text-main);
+            margin-bottom: 25px;
             position: relative;
+            box-shadow: inset 0 5px 15px rgba(0,0,0,0.5);
         }
 
-        .insp-display::before {
-            content: 'MUESTRA EN ANÁLISIS';
+        .insp-progress {
             position: absolute;
-            top: -10px;
-            background: var(--primary);
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--accent);
             color: white;
             font-size: 10px;
-            padding: 3px 8px;
-            border-radius: 10px;
             font-weight: bold;
+            padding: 4px 12px;
+            border-radius: 20px;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 10px var(--accent-glow);
         }
 
         .insp-actions {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
+            display: flex;
+            flex-direction: column;
             gap: 12px;
         }
 
         .btn-action {
-            background: var(--surface);
-            border: 2px solid var(--border);
-            border-radius: 10px;
-            padding: 15px;
-            font-size: 14px;
-            font-weight: 600;
-            color: var(--text-dark);
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 16px;
+            font-size: 15px;
+            color: var(--text-main);
             cursor: pointer;
-            transition: all 0.2s;
-            box-shadow: var(--shadow);
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+            overflow: hidden;
         }
 
-        .btn-action:active { transform: scale(0.96); }
-        
+        .btn-action::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            transform: translateX(-100%);
+            transition: 0.5s;
+        }
+
+        .btn-action:active { transform: scale(0.97); }
+
         .insp-feedback {
             margin-top: 20px;
             text-align: center;
-            font-size: 14px;
-            font-weight: 500;
+            font-size: 13px;
             min-height: 40px;
+            color: var(--text-muted);
+            opacity: 0;
+            transition: opacity 0.3s;
         }
+        .insp-feedback.show { opacity: 1; }
 
-        /* PANTALLA COMÚN DE VICTORIA */
+        /* === PANTALLAS DE VICTORIA === */
         .victory-screen {
             display: none;
             text-align: center;
-            background: var(--surface);
-            padding: 30px 20px;
-            border-radius: 12px;
-            box-shadow: var(--shadow);
-            border: 1px solid var(--success-light);
-            animation: fadeIn 0.4s ease-out;
+            padding: 20px 0;
+            animation: fadeSlideUp 0.6s;
+        }
+
+        .victory-title {
+            font-size: 28px;
+            color: var(--success);
+            margin-bottom: 10px;
+            text-shadow: 0 0 20px var(--success-glow);
         }
 
         .btn-restart {
-            margin-top: 20px;
-            padding: 12px 24px;
-            background: var(--primary);
-            color: white;
+            margin-top: 25px;
+            padding: 16px 32px;
+            background: var(--text-main);
+            color: #000;
             border: none;
-            border-radius: 8px;
-            font-weight: 600;
+            border-radius: 30px;
+            font-weight: 700;
             font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
             cursor: pointer;
-            width: 100%;
+            transition: all 0.3s;
+            box-shadow: 0 10px 20px rgba(255,255,255,0.15);
         }
 
-        /* BOTÓN FLOTANTE (FAB) */
+        .btn-restart:active { transform: translateY(2px); }
+
+        /* === BOTÓN FLOTANTE (FAB) === */
         .fab {
             position: fixed;
-            bottom: 60px; /* Espacio para el footer */
+            bottom: 40px;
             right: 20px;
-            width: 56px;
-            height: 56px;
-            border-radius: 28px;
-            background: var(--primary);
-            color: white;
-            border: none;
-            box-shadow: 0 4px 12px rgba(2, 132, 199, 0.4);
+            width: 60px;
+            height: 60px;
+            border-radius: 30px;
+            background: rgba(20, 20, 25, 0.8);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            color: var(--text-main);
+            box-shadow: 0 15px 25px rgba(0,0,0,0.5), inset 0 1px 0 var(--glass-highlight);
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 24px;
             z-index: 100;
-            transition: transform 0.2s;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        .fab:active { transform: scale(0.9); }
+        .fab:active { transform: scale(0.85) rotate(15deg); }
 
-        /* FOOTER DE AGENCIA */
+        /* === FOOTER AGENCY === */
         footer {
+            position: fixed;
+            bottom: 15px;
             width: 100%;
             text-align: center;
-            padding: 15px;
             font-size: 11px;
-            color: var(--text-muted);
-            background: var(--surface);
-            border-top: 1px solid var(--border);
+            color: rgba(255,255,255,0.3);
+            letter-spacing: 1px;
+            z-index: 0;
         }
 
         footer span {
-            font-weight: 700;
-            color: var(--primary);
+            color: rgba(255,255,255,0.6);
+            font-weight: 600;
         }
-
     </style>
 </head>
 <body>
 
-    <header>
-        <div class="logo-container">
-            <div class="logo-placeholder">🔬 FOODCHECK</div>
-        </div>
-        <h1>Control de Inocuidad</h1>
-        <div class="module-badge" id="module-title">Módulo: Memoria</div>
-    </header>
+    <div class="ambient-light"></div>
 
-    <main>
+    <div class="glass-panel">
+        <header class="header">
+            <div class="logo-container">
+                <!-- INSERTA TU LOGO AQUÍ -->
+                <!-- <img src="TU_LOGO.png" alt="Logo" style="height: 100%;"> -->
+                <div class="logo-placeholder">FOOD<span>CHECK</span></div>
+            </div>
+            <h1 class="title">Control de Calidad</h1>
+            <div class="subtitle" id="module-title">Módulo: Memoria Visual</div>
+        </header>
+
+        <!-- VISTA 1: MEMOTEST 3D -->
         <section id="view-memotest" class="game-view active">
             <div class="memo-board" id="memo-board"></div>
             <div class="victory-screen" id="memo-victory">
-                <h2 style="color: var(--success); margin-bottom: 10px;">¡Análisis Completado!</h2>
-                <p>Has emparejado todos los criterios de calidad.</p>
-                <button class="btn-restart" onclick="initMemotest()">Reiniciar Módulo</button>
+                <h2 class="victory-title">¡Análisis Exitoso!</h2>
+                <p style="color: var(--text-muted);">Has emparejado correctamente los estándares del mercado.</p>
+                <button class="btn-restart" onclick="initMemotest()">Nuevo Análisis</button>
             </div>
         </section>
 
+        <!-- VISTA 2: SIMULADOR INSPECTOR -->
         <section id="view-inspector" class="game-view">
             <div id="insp-gameplay">
-                <div class="insp-progress" id="insp-progress">Lote 1 / 6</div>
-                <div class="insp-display" id="insp-display">Cargando muestra...</div>
+                <div class="insp-display" id="insp-display">
+                    <div class="insp-progress" id="insp-progress">LOTE 1/6</div>
+                    <span id="insp-text">Cargando muestra...</span>
+                </div>
                 <div class="insp-actions" id="insp-actions"></div>
                 <div class="insp-feedback" id="insp-feedback"></div>
             </div>
             <div class="victory-screen" id="insp-victory">
-                <h2 style="color: var(--primary); margin-bottom: 10px;">¡Turno Finalizado!</h2>
-                <p id="insp-final-msg"></p>
+                <h2 class="victory-title" style="color: var(--accent); text-shadow: 0 0 20px var(--accent-glow);">Turno Finalizado</h2>
+                <p id="insp-final-msg" style="color: var(--text-muted);"></p>
                 <button class="btn-restart" onclick="initInspector()">Siguiente Turno</button>
             </div>
         </section>
-    </main>
+    </div>
 
-    <button class="fab" id="switch-btn" onclick="toggleGame()" title="Cambiar Simulador">
-        🔄
+    <button class="fab" onclick="toggleGame()" title="Cambiar Módulo">
+        ⚗️
     </button>
 
     <footer>
@@ -352,11 +408,12 @@
     </footer>
 
     <script>
-        // --- CONTROLADOR GENERAL ---
+        // --- CONTROLADOR DE MÓDULOS ---
         let currentMode = 'memotest';
         const viewMemo = document.getElementById('view-memotest');
         const viewInsp = document.getElementById('view-inspector');
         const moduleTitle = document.getElementById('module-title');
+        const ambient = document.querySelector('.ambient-light');
 
         function toggleGame() {
             if (currentMode === 'memotest') {
@@ -364,29 +421,30 @@
                 viewMemo.classList.remove('active');
                 viewInsp.classList.add('active');
                 moduleTitle.innerText = "Módulo: Inspección Rápida";
+                ambient.style.background = "radial-gradient(circle, var(--accent-glow) 0%, transparent 70%)";
                 initInspector();
             } else {
                 currentMode = 'memotest';
                 viewInsp.classList.remove('active');
                 viewMemo.classList.add('active');
-                moduleTitle.innerText = "Módulo: Memoria";
+                moduleTitle.innerText = "Módulo: Memoria Visual";
+                ambient.style.background = "radial-gradient(circle, var(--success-glow) 0%, transparent 70%)";
                 initMemotest();
             }
         }
 
-        // --- LÓGICA DEL MEMOTEST ---
+        // --- LÓGICA MEMOTEST ---
+        // Basado en Documento: Capacitación. Frutas y hortalizas.docx
         const memoData = [
             { id: 1, text: "Frutillas y Uvas", icon: "🍓" }, { id: 1, text: "Requieren Refrigeración", icon: "❄️" },
             { id: 2, text: "Banana o Papa", icon: "🍌" }, { id: 2, text: "Temperatura Ambiente", icon: "🌡️" },
-            { id: 3, text: "Primera Calidad", icon: "⭐" }, { id: 3, text: "Aptos Venta Directa", icon: "🛒" },
+            { id: 3, text: "Primera Calidad", icon: "⭐" }, { id: 3, text: "Apto Venta Directa", icon: "🛒" },
             { id: 4, text: "Tercera Calidad", icon: "⚠️" }, { id: 4, text: "Industria o Descarte", icon: "🗑️" },
-            { id: 5, text: "Transporte", icon: "🚚" }, { id: 5, text: "Limpios y Cerrados", icon: "🧼" },
-            { id: 6, text: "Contaminación Cruzada", icon: "🦠" }, { id: 6, text: "Afecta a Productos Sanos", icon: "❌" }
+            { id: 5, text: "Transporte", icon: "🚚" }, { id: 5, text: "Limpio y Cerrado", icon: "🧼" },
+            { id: 6, text: "Contaminación", icon: "🦠" }, { id: 6, text: "Afecta Producto Sano", icon: "❌" }
         ];
 
-        let hasFlippedCard = false, lockBoard = false;
-        let firstCard, secondCard;
-        let memoMatches = 0;
+        let hasFlippedCard = false, lockBoard = false, firstCard, secondCard, memoMatches = 0;
 
         function initMemotest() {
             const board = document.getElementById('memo-board');
@@ -403,7 +461,7 @@
                 card.classList.add('memo-card');
                 card.dataset.id = data.id;
                 card.innerHTML = `
-                    <div class="card-face card-front">🔬</div>
+                    <div class="card-face card-front">🌿</div>
                     <div class="card-face card-back">
                         <div class="card-icon">${data.icon}</div>
                         <div>${data.text}</div>
@@ -412,6 +470,7 @@
                 card.addEventListener('click', flipCard);
                 board.appendChild(card);
             });
+            ambient.style.background = "radial-gradient(circle, var(--success-glow) 0%, transparent 70%)";
         }
 
         function flipCard() {
@@ -438,14 +497,14 @@
                         document.getElementById('memo-board').style.display = 'none';
                         document.getElementById('memo-victory').style.display = 'block';
                     }
-                }, 400);
+                }, 500);
             } else {
                 lockBoard = true;
                 setTimeout(() => {
                     firstCard.classList.remove('flipped');
                     secondCard.classList.remove('flipped');
                     resetMemoBoard();
-                }, 1000);
+                }, 1200);
             }
         }
 
@@ -454,19 +513,18 @@
             [firstCard, secondCard] = [null, null];
         }
 
-        // --- LÓGICA DEL SIMULADOR DE INSPECTOR ---
+        // --- LÓGICA SIMULADOR ---
+        // Basado en Documento: Capacitación. Frutas y hortalizas.docx
         const inspItems = [
-            { text: "Llegan cajones de frutillas frescas.", options: ["Refrigerar", "Temp. Ambiente"], correct: 0, exp: "Las frutillas requieren cadena de frío." },
-            { text: "Lote de manzanas de tamaño perfecto y color brillante.", options: ["1ra Calidad", "3ra Calidad"], correct: 0, exp: "Óptimas para venta directa." },
-            { text: "Hortalizas con daños visibles por golpes severos.", options: ["Segunda Calidad", "Descarte / Industria"], correct: 1, exp: "Riesgo de deterioro avanzado." },
-            { text: "Llega transporte cerrado pero con interior sucio.", options: ["Aceptar", "Rechazar"], correct: 1, exp: "La limpieza es innegociable." },
-            { text: "Almacenaje de vegetales limpios junto a carnes crudas.", options: ["Permitido", "Riesgo Cruzado"], correct: 1, exp: "Genera contaminación cruzada inminente." },
-            { text: "Bolsas de papa llegando del campo.", options: ["Refrigerar", "Temp. Ambiente"], correct: 1, exp: "La papa no requiere refrigeración." }
+            { text: "Lote de frutillas y uvas recién recibidas en el abasto.", options: ["A Refrigeración", "A Temp. Ambiente"], correct: 0, exp: "Requieren refrigeración para conservar calidad." },
+            { text: "Lote de manzanas de tamaño homogéneo y color brillante.", options: ["Primera Calidad", "Tercera Calidad"], correct: 0, exp: "Clasifican para venta directa." },
+            { text: "Hortalizas con daños visibles o sobremaduración extrema.", options: ["Segunda Calidad", "Descarte o Industria"], correct: 1, exp: "La tercera calidad no es apta para venta directa." },
+            { text: "Llega transporte con mercadería; el camión está abierto y sucio.", options: ["Aceptar Carga", "Rechazar Carga"], correct: 1, exp: "El transporte debe ser limpio y cerrado." },
+            { text: "Se colocan verduras junto a frutas que liberan mucho etileno.", options: ["Correcto", "Incorrecto (Incompatible)"], correct: 1, exp: "Genera maduración acelerada y deterioro cruzado." },
+            { text: "Lote de bananas y papas ingresando al depósito.", options: ["A Refrigeración", "A Temp. Ambiente"], correct: 1, exp: "Se conservan mejor a temperatura ambiente." }
         ];
 
-        let currentInsp = 0;
-        let inspScore = 0;
-        let inspActive = true;
+        let currentInsp = 0, inspScore = 0, inspActive = true;
 
         function initInspector() {
             document.getElementById('insp-gameplay').style.display = 'block';
@@ -482,9 +540,11 @@
                 return;
             }
             const item = inspItems[currentInsp];
-            document.getElementById('insp-display').innerText = item.text;
-            document.getElementById('insp-progress').innerText = `Muestra ${currentInsp + 1} de ${inspItems.length}`;
-            document.getElementById('insp-feedback').innerHTML = '';
+            document.getElementById('insp-text').innerText = item.text;
+            document.getElementById('insp-progress').innerText = `LOTE ${currentInsp + 1}/${inspItems.length}`;
+            
+            const feedback = document.getElementById('insp-feedback');
+            feedback.classList.remove('show');
             
             const actionsDiv = document.getElementById('insp-actions');
             actionsDiv.innerHTML = '';
@@ -507,31 +567,32 @@
             const feedback = document.getElementById('insp-feedback');
 
             if (index === item.correct) {
+                btnSelected.style.background = "rgba(46, 213, 115, 0.2)";
                 btnSelected.style.borderColor = "var(--success)";
-                btnSelected.style.backgroundColor = "var(--success-light)";
-                feedback.innerHTML = `<span style="color:var(--success)">✓ Correcto:</span> ${item.exp}`;
+                feedback.innerHTML = `<span style="color:var(--success)">✓ Criterio Aprobado:</span> ${item.exp}`;
                 inspScore++;
             } else {
-                btnSelected.style.borderColor = "var(--danger)";
-                btnSelected.style.backgroundColor = "var(--danger-light)";
+                btnSelected.style.background = "rgba(255, 71, 87, 0.2)";
+                btnSelected.style.borderColor = "var(--accent)";
                 btns[item.correct].style.borderColor = "var(--success)";
-                feedback.innerHTML = `<span style="color:var(--danger)">✗ Error:</span> ${item.exp}`;
+                feedback.innerHTML = `<span style="color:var(--accent)">✗ Criterio Rechazado:</span> ${item.exp}`;
             }
+            
+            feedback.classList.add('show');
 
             setTimeout(() => {
                 currentInsp++;
                 loadInspItem();
-            }, 2500);
+            }, 3000);
         }
 
         function endInspector() {
             document.getElementById('insp-gameplay').style.display = 'none';
             document.getElementById('insp-victory').style.display = 'block';
-            const msg = document.getElementById('insp-final-msg');
-            msg.innerText = `Precisión del control: ${inspScore} / ${inspItems.length} muestras analizadas correctamente.`;
+            document.getElementById('insp-final-msg').innerText = `Precisión: ${inspScore} de ${inspItems.length} lotes clasificados con éxito.`;
         }
 
-        // Inicializar el primer juego al cargar
+        // Iniciar
         initMemotest();
     </script>
 </body>
