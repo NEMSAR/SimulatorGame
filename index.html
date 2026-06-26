@@ -3,686 +3,537 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>INOCUIDAD 360 // FOODCHECK</title>
+    <title>FOODCHECK | Abasto Master</title>
     <style>
-        /* ==========================================================================
-           1. VARIABLES & ESTÉTICA "STREET-TECH / MOTION EDITORIAL"
-           ========================================================================== */
+        /* === VARIABLES PREMIUM === */
         :root {
-            --bg-dark: #07110e;
-            --primary-green: #10b981;
-            --accent-yellow: #facc15;
-            --text-light: #f8fafc;
-            --text-dim: #94a3b8;
-            --glass-panel: rgba(13, 27, 22, 0.75);
-            --glass-border: rgba(255, 255, 255, 0.1);
-            --font-main: 'Impact', 'Arial Black', sans-serif;
-            --font-sec: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            --accent: #ff4757; 
+            --accent-glow: rgba(255, 71, 87, 0.4);
+            --success: #2ed573;
+            --success-glow: rgba(46, 213, 115, 0.4);
+            --yellow-tag: #ffcc00;
+            --text-main: #f1f2f6;
+            --text-muted: #a4b0be;
+            --glass-bg: rgba(20, 20, 25, 0.65);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --glass-highlight: rgba(255, 255, 255, 0.15);
         }
 
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
             -webkit-tap-highlight-color: transparent;
             user-select: none;
         }
 
         body {
-            background-color: var(--bg-dark);
-            /* Fondo con textura sutil y degradado dramático verde/amarillo inspirado en la referencia */
-            background-image: 
-                radial-gradient(circle at 50% 20%, rgba(16, 185, 129, 0.2) 0%, rgba(7, 17, 14, 0.95) 75%),
-                linear-gradient(to bottom, transparent 60%, rgba(0,0,0,0.8));
-            color: var(--text-light);
+            background: 
+                linear-gradient(to bottom, rgba(15, 15, 18, 0.8), rgba(10, 10, 12, 0.98)),
+                url('https://images.unsplash.com/photo-1498837167386-41801c402120?auto=format&fit=crop&q=80&w=1080') center/cover fixed;
+            color: var(--text-main);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
             overflow-x: hidden;
-            padding: 20px 15px 70px 15px;
-            font-family: var(--font-sec);
+            padding: 20px 15px;
         }
 
-        /* Iluminación de fondo animada en bucle (Motion Glow) */
-        .motion-glow {
+        /* === ILUMINACIÓN AMBIENTAL === */
+        .ambient-light {
             position: fixed;
-            top: 25%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 320px;
-            height: 320px;
-            background: radial-gradient(circle, rgba(250, 204, 21, 0.15) 0%, rgba(16, 185, 129, 0.1) 50%, transparent 70%);
-            filter: blur(50px);
-            z-index: -1;
-            animation: pulseGlow 6s infinite alternate ease-in-out;
-        }
-
-        @keyframes pulseGlow {
-            0% { transform: translate(-50%, -50%) scale(0.8); opacity: 0.5; }
-            100% { transform: translate(-50%, -50%) scale(1.3); opacity: 1; }
-        }
-
-        /* ==========================================================================
-           2. SISTEMA DE PANTALLAS Y TRANSICIONES PREMIUM
-           ========================================================================== */
-        .screen {
-            display: none;
-            width: 100%;
-            max-width: 460px;
-            animation: screenEntry 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-        }
-
-        .screen.active {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        @keyframes screenEntry {
-            0% { opacity: 0; transform: translateY(25px) scale(0.98); }
-            100% { opacity: 1; transform: translateY(0) scale(1); }
-        }
-
-        /* ==========================================================================
-           3. PANTALLA DE INICIO (HOME): ESTILO MOTION GRÁFICO
-           ========================================================================== */
-        .logo-container {
-            height: 45px;
-            margin-bottom: 25px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .logo-container img {
-            max-height: 100%;
-            object-fit: contain;
-        }
-
-        .logo-fallback {
-            font-family: var(--font-main);
-            font-size: 24px;
-            letter-spacing: 2px;
-            color: var(--text-light);
-            text-transform: uppercase;
-        }
-        .logo-fallback span { color: var(--primary-green); }
-
-        /* Título Principal Monumental */
-        .hero-title-group {
-            text-align: center;
-            position: relative;
-            margin-bottom: 35px;
-        }
-
-        .hero-title {
-            font-family: var(--font-main);
-            font-size: 54px;
-            line-height: 0.9;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: var(--text-light);
-            /* Sombra dura paralela estilo diseño gráfico editorial */
-            text-shadow: 4px 4px 0px #000, 8px 8px 20px rgba(0,0,0,0.8);
-            margin-bottom: 10px;
-        }
-
-        .hero-title .highlight {
-            color: var(--accent-yellow);
-            display: block;
-        }
-
-        /* Etiqueta flotante rotada en ángulo agresivo */
-        .hero-badge {
-            background-color: var(--accent-yellow);
-            color: #000;
-            font-family: var(--font-main);
-            font-size: 14px;
-            text-transform: uppercase;
-            padding: 6px 16px;
-            letter-spacing: 1px;
-            box-shadow: 5px 5px 0px rgba(0,0,0,0.9);
-            transform: rotate(-3deg);
-            display: inline-block;
-            animation: floatBadge 3s infinite ease-in-out alternate;
-        }
-
-        @keyframes floatBadge {
-            0% { transform: rotate(-3deg) translateY(0px); }
-            100% { transform: rotate(-1deg) translateY(-5px); }
-        }
-
-        /* Selector de Juegos */
-        .menu-cards {
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
-
-        .game-select-btn {
-            background: var(--glass-panel);
-            border: 1px solid var(--glass-border);
-            border-left: 6px solid var(--primary-green);
-            padding: 22px 20px;
-            border-radius: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            cursor: pointer;
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
-            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-            text-align: left;
-            width: 100%;
-        }
-
-        .game-select-btn:active {
-            transform: scale(0.96) translateX(4px);
-            border-color: var(--accent-yellow);
-        }
-
-        .game-select-btn.yellow-mode {
-            border-left-color: var(--accent-yellow);
-        }
-
-        .btn-info h3 {
-            font-family: var(--font-main);
-            font-size: 22px;
-            letter-spacing: 1px;
-            color: var(--text-light);
-            margin-bottom: 4px;
-            text-transform: uppercase;
-        }
-
-        .btn-info p {
-            font-size: 13px;
-            color: var(--text-dim);
-            line-height: 1.3;
-        }
-
-        .btn-arrow {
-            font-size: 24px;
-            color: var(--text-light);
-            background: rgba(255,255,255,0.05);
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 1px solid var(--glass-border);
-        }
-
-        /* ==========================================================================
-           4. INTERFAZ DE JUEGO (COMÚN)
-           ========================================================================== */
-        .game-header {
-            width: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 25px;
-            background: var(--glass-panel);
-            padding: 15px 20px;
-            border-radius: 16px;
-            border: 1px solid var(--glass-border);
-        }
-
-        .back-home-btn {
-            background: transparent;
-            border: none;
-            color: var(--accent-yellow);
-            font-family: var(--font-main);
-            font-size: 14px;
-            letter-spacing: 1px;
-            cursor: pointer;
-            text-transform: uppercase;
-        }
-
-        .game-mode-title {
-            font-family: var(--font-main);
-            font-size: 18px;
-            letter-spacing: 1px;
-            color: var(--text-light);
-            text-transform: uppercase;
-        }
-
-        /* TABLERO MEMOTEST */
-        .memo-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 12px;
-            width: 100%;
-            perspective: 1000px;
-        }
-
-        .card {
-            width: 100%;
-            aspect-ratio: 1 / 1.25;
-            cursor: pointer;
-            position: relative;
-            transform-style: preserve-3d;
-            transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
-
-        .card * { pointer-events: none; }
-        .card.flipped { transform: rotateY(180deg); }
-        .card.matched {
-            transform: rotateY(180deg) scale(0.88);
-            opacity: 0.4;
-        }
-
-        .card-face {
-            position: absolute;
-            width: 100%; height: 100%;
-            backface-visibility: hidden;
-            border-radius: 12px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 8px;
-            text-align: center;
-            border: 1px solid var(--glass-border);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.4);
-        }
-
-        .card-front {
-            background: linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
-            font-size: 26px;
-        }
-
-        .card-back {
-            background: #13221c;
-            border-color: var(--primary-green);
-            transform: rotateY(180deg);
-            font-size: 11px;
-            font-weight: 700;
-            color: var(--text-light);
-        }
-        .card-back .icon { font-size: 24px; margin-bottom: 4px; }
-
-        /* SIMULADOR INSPECTOR */
-        .insp-container { width: 100%; }
-
-        .insp-box {
-            background: var(--glass-panel);
-            border: 1px solid var(--glass-border);
-            border-radius: 20px;
-            padding: 40px 20px;
-            text-align: center;
-            position: relative;
-            margin-bottom: 20px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.6);
-        }
-
-        .insp-counter {
-            position: absolute;
-            top: -12px;
+            top: 30%;
             left: 50%;
             transform: translateX(-50%);
-            background: var(--accent-yellow);
-            color: #000;
-            font-family: var(--font-main);
-            font-size: 12px;
-            padding: 4px 14px;
-            border-radius: 20px;
-            letter-spacing: 1px;
-        }
-
-        .insp-question { font-size: 17px; line-height: 1.4; font-weight: 500; }
-
-        .insp-btn-group {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-        }
-
-        .action-btn {
-            background: rgba(255,255,255,0.06);
-            border: 1px solid var(--glass-border);
-            color: var(--text-light);
-            padding: 18px 10px;
-            border-radius: 14px;
-            font-weight: 700;
-            font-size: 14px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .action-btn:active { transform: scale(0.95); background: rgba(255,255,255,0.12); }
-
-        .insp-feedback {
-            margin-top: 18px;
-            text-align: center;
-            font-size: 13px;
-            min-height: 40px;
-            color: var(--text-dim);
-            line-height: 1.3;
-        }
-
-        /* PANTALLA VICTORIA */
-        .win-box {
-            background: var(--glass-panel);
-            border: 1px solid var(--primary-green);
-            padding: 35px 25px;
-            border-radius: 24px;
-            text-align: center;
-            width: 100%;
-            box-shadow: 0 0 40px rgba(16, 185, 129, 0.2);
-        }
-
-        .win-title {
-            font-family: var(--font-main);
-            font-size: 36px;
-            color: var(--primary-green);
-            letter-spacing: 1px;
-            margin-bottom: 10px;
-        }
-
-        .restart-btn {
-            margin-top: 25px;
-            background: var(--accent-yellow);
-            color: #000;
-            border: none;
-            font-family: var(--font-main);
-            font-size: 16px;
-            padding: 16px 30px;
-            border-radius: 12px;
-            cursor: pointer;
-            width: 100%;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            box-shadow: 0 8px 20px rgba(250, 204, 21, 0.3);
-        }
-
-        /* ==========================================================================
-           5. BOTÓN FLOTANTE (FAB) & FOOTER
-           ========================================================================== */
-        .fab-switch {
-            position: fixed;
-            bottom: 45px;
-            right: 20px;
-            width: 56px;
-            height: 56px;
+            width: 350px;
+            height: 350px;
+            background: radial-gradient(circle, rgba(255, 204, 0, 0.15) 0%, transparent 70%);
             border-radius: 50%;
-            background: var(--accent-yellow);
-            color: #000;
-            border: none;
-            font-size: 24px;
+            filter: blur(50px);
+            z-index: -1;
+            animation: breathe 6s ease-in-out infinite alternate;
+        }
+
+        @keyframes breathe {
+            0% { opacity: 0.4; transform: translateX(-50%) scale(0.9); }
+            100% { opacity: 0.8; transform: translateX(-50%) scale(1.1); }
+        }
+
+        /* === PANTALLA DE INICIO (ESTILO URBANO/GRUNGE) === */
+        #home-screen {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            max-width: 500px;
+            flex: 1;
+            z-index: 10;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        .hero-title-container {
+            position: relative;
+            text-align: center;
+            margin-bottom: 50px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            animation: floatUp 1.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* Tipografía Masiva Superpuesta */
+        .hero-text-bg, .hero-text-fg {
+            font-family: 'Impact', 'Arial Black', sans-serif;
+            font-size: clamp(60px, 18vw, 100px);
+            line-height: 0.8;
+            text-transform: uppercase;
+            letter-spacing: -2px;
+        }
+
+        .hero-text-bg {
+            color: #4a4e59;
+            text-shadow: 0 10px 20px rgba(0,0,0,0.8);
+            transform: translateY(10px);
+        }
+
+        .hero-text-fg {
+            color: #ffffff;
+            text-shadow: 0 15px 30px rgba(0,0,0,0.9);
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Etiqueta Amarilla estilo "Background Motion" */
+        .hero-badge {
+            position: absolute;
+            top: 48%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-4deg);
+            background: var(--yellow-tag);
+            color: #111;
+            font-weight: 900;
+            font-size: clamp(12px, 4vw, 16px);
+            padding: 8px 20px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.6);
+            z-index: 3;
+            white-space: nowrap;
+            border: 2px solid #000;
+            animation: badgePulse 3s infinite alternate;
+        }
+
+        @keyframes badgePulse {
+            0% { transform: translate(-50%, -50%) rotate(-4deg) scale(1); }
+            100% { transform: translate(-50%, -50%) rotate(-3deg) scale(1.05); }
+        }
+
+        /* Tarjetas de Selección de Juego */
+        .mode-selector {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .mode-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 25px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            cursor: pointer;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.4), inset 0 1px 0 var(--glass-highlight);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .mode-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(120deg, transparent, rgba(255,255,255,0.05), transparent);
+            transform: translateX(-100%);
+            transition: 0.6s;
+        }
+
+        .mode-card:active { transform: scale(0.96); }
+        .mode-card:active::before { transform: translateX(100%); }
+
+        .mode-icon {
+            font-size: 38px;
+            background: rgba(255,255,255,0.05);
+            width: 70px;
+            height: 70px;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.8);
-            cursor: pointer;
-            z-index: 100;
-            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            display: none; /* Oculto en el Home */
+            border-radius: 18px;
+            border: 1px solid rgba(255,255,255,0.1);
         }
-        .fab-switch:active { transform: scale(0.85) rotate(180deg); }
 
+        .mode-info h3 {
+            font-size: 20px;
+            margin-bottom: 5px;
+            color: #fff;
+        }
+
+        .mode-info p {
+            font-size: 13px;
+            color: var(--text-muted);
+            line-height: 1.4;
+        }
+
+        /* === PANEL DE JUEGO (GLASSMORPHISM) === */
+        #game-container {
+            display: none; /* Oculto al inicio */
+            width: 100%;
+            max-width: 480px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 30px;
+            padding: 30px 20px;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6), inset 0 1px 0 var(--glass-highlight);
+            flex-direction: column;
+            position: relative;
+            z-index: 1;
+            margin-bottom: 80px;
+            animation: fadeSlideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .header { text-align: center; margin-bottom: 25px; }
+        .logo-placeholder { font-size: 20px; font-weight: 300; letter-spacing: 2px; color: var(--text-main); margin-bottom: 10px; }
+        .logo-placeholder span { color: var(--yellow-tag); font-weight: bold; }
+        .title { font-size: 22px; font-weight: 600; margin-bottom: 8px; }
+        .subtitle { font-size: 11px; text-transform: uppercase; letter-spacing: 2px; color: var(--accent); font-weight: 700; }
+
+        /* Vistas de Juego */
+        .game-view { display: none; width: 100%; animation: fadeIn 0.4s; }
+        .game-view.active { display: block; }
+
+        /* Estilos Memotest */
+        .memo-board { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; perspective: 1200px; }
+        .memo-card { width: 100%; aspect-ratio: 1/1.25; cursor: pointer; position: relative; transform-style: preserve-3d; transition: transform 0.6s; }
+        .memo-card.flipped { transform: rotateY(180deg); }
+        .memo-card.matched { transform: rotateY(180deg) scale(0.9); opacity: 0.4; pointer-events: none; }
+        .card-face { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 16px; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 8px; text-align: center; }
+        .card-front { background: rgba(255, 255, 255, 0.03); border: 1px solid var(--glass-border); font-size: 28px; }
+        .card-back { background: linear-gradient(135deg, rgba(46, 213, 115, 0.1), rgba(46, 213, 115, 0.02)); border: 1px solid var(--success); transform: rotateY(180deg); font-size: 11px; font-weight: 600; }
+        .card-icon { font-size: 24px; margin-bottom: 4px; }
+
+        /* Estilos Simulador */
+        .insp-display { background: rgba(0, 0, 0, 0.3); border: 1px solid var(--glass-border); border-radius: 20px; padding: 40px 20px; text-align: center; font-size: 16px; margin-bottom: 25px; position: relative; }
+        .insp-progress { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: var(--yellow-tag); color: #000; font-size: 10px; font-weight: 900; padding: 4px 12px; border-radius: 20px; letter-spacing: 1px; }
+        .insp-actions { display: flex; flex-direction: column; gap: 12px; }
+        .btn-action { background: rgba(255, 255, 255, 0.05); border: 1px solid var(--glass-border); border-radius: 16px; padding: 16px; font-size: 15px; color: var(--text-main); cursor: pointer; transition: 0.3s; }
+        .btn-action:active { transform: scale(0.97); }
+        .insp-feedback { margin-top: 15px; text-align: center; font-size: 13px; min-height: 40px; color: var(--text-muted); opacity: 0; transition: 0.3s; }
+        .insp-feedback.show { opacity: 1; }
+
+        /* Victoria & Botones */
+        .victory-screen { display: none; text-align: center; padding: 20px 0; }
+        .victory-title { font-size: 26px; color: var(--success); margin-bottom: 10px; }
+        .btn-restart { margin-top: 25px; padding: 16px 32px; background: var(--text-main); color: #000; border: none; border-radius: 30px; font-weight: 700; font-size: 13px; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; transition: 0.3s; width: 100%;}
+        .btn-restart:active { transform: translateY(2px); }
+
+        /* === BOTÓN FLOTANTE (VOLVER A INICIO) === */
+        .fab {
+            position: fixed;
+            bottom: 30px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            border-radius: 25px;
+            background: rgba(20, 20, 25, 0.8);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            color: var(--text-main);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+            cursor: pointer;
+            display: none; /* Oculto en el inicio */
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            z-index: 100;
+            transition: 0.3s;
+        }
+        .fab:active { transform: scale(0.85); }
+
+        /* === FOOTER === */
         footer {
             position: fixed;
-            bottom: 12px;
+            bottom: 10px;
             width: 100%;
             text-align: center;
-            font-size: 11px;
-            color: rgba(255, 255, 255, 0.35);
+            font-size: 10px;
+            color: rgba(255,255,255,0.3);
             letter-spacing: 1px;
-            z-index: 10;
+            z-index: 0;
         }
-        footer span { color: rgba(255, 255, 255, 0.7); font-weight: 700; }
+        footer span { color: rgba(255,255,255,0.6); font-weight: 600; }
+
+        /* Animaciones Globales */
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes fadeSlideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes floatUp { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
 
-    <div class="motion-glow"></div>
+    <div class="ambient-light"></div>
 
-    <!-- PANTALLA 1: MENÚ DE INICIO (HOME) -->
-    <div id="screen-home" class="screen active">
-        <div class="logo-container">
-            <!-- Pega el enlace web (URL) directa de tu logo en el atributo src -->
-            <!-- <img src="URL_DE_TU_LOGO_AQUI.png" alt="Logo"> -->
-            <div class="logo-fallback">🔬 FOOD<span>CHECK</span></div>
+    <!-- === PANTALLA DE INICIO HERO === -->
+    <section id="home-screen">
+        <div class="hero-title-container">
+            <div class="hero-text-bg">ABASTO</div>
+            <div class="hero-text-fg">MASTER</div>
+            <div class="hero-badge">PROTOCOLO DE CALIDAD</div>
         </div>
 
-        <div class="hero-title-group">
-            <h1 class="hero-title">
-                INOCUIDAD
-                <span class="highlight">360°</span>
-            </h1>
-            <div class="hero-badge">⚡ Capacitación Práctica ⚡</div>
-        </div>
-
-        <div class="menu-cards">
-            <button class="game-select-btn" onclick="goToGame('memo')">
-                <div class="btn-info">
+        <div class="mode-selector">
+            <div class="mode-card" onclick="startGame('memotest')">
+                <div class="mode-icon">🧠</div>
+                <div class="mode-info">
                     <h3>Memoria Visual</h3>
-                    <p>Empareja conceptos clave de conservación y calidad.</p>
+                    <p>Encuentra los pares y domina la teoría de conservación.</p>
                 </div>
-                <div class="btn-arrow">→</div>
-            </button>
-
-            <button class="game-select-btn yellow-mode" onclick="goToGame('inspector')">
-                <div class="btn-info">
-                    <h3>Simulador Inspector</h3>
-                    <p>Clasifica la mercadería entrante en tiempo real.</p>
-                </div>
-                <div class="btn-arrow">→</div>
-            </button>
-        </div>
-    </div>
-
-    <!-- PANTALLA 2: JUEGO MEMOTEST -->
-    <div id="screen-memo" class="screen">
-        <div class="game-header">
-            <button class="back-home-btn" onclick="goToHome()">← Inicio</button>
-            <span class="game-mode-title">Memoria Visual</span>
-        </div>
-        <div class="memo-grid" id="memo-board"></div>
-    </div>
-
-    <!-- PANTALLA 3: SIMULADOR INSPECTOR -->
-    <div id="screen-inspector" class="screen">
-        <div class="game-header">
-            <button class="back-home-btn" onclick="goToHome()">← Inicio</button>
-            <span class="game-mode-title">Inspección Rápida</span>
-        </div>
-        <div class="insp-container">
-            <div class="insp-box">
-                <div class="insp-counter" id="insp-counter">LOTE 1/6</div>
-                <p class="insp-question" id="insp-question">Cargando...</p>
             </div>
-            <div class="insp-btn-group" id="insp-options"></div>
-            <div class="insp-feedback" id="insp-feedback"></div>
+
+            <div class="mode-card" onclick="startGame('inspector')">
+                <div class="mode-icon">🔍</div>
+                <div class="mode-info">
+                    <h3>Inspección Rápida</h3>
+                    <p>Toma decisiones en tiempo real sobre los lotes entrantes.</p>
+                </div>
+            </div>
         </div>
+    </section>
+
+    <!-- === CONTENEDOR DEL JUEGO (GLASS PANEL) === -->
+    <div id="game-container">
+        <header class="header">
+            <div class="logo-placeholder">FOOD<span>CHECK</span></div>
+            <h1 class="title">Control de Calidad</h1>
+            <div class="subtitle" id="module-title">Módulo Activo</div>
+        </header>
+
+        <!-- VISTA: MEMOTEST -->
+        <section id="view-memotest" class="game-view">
+            <div class="memo-board" id="memo-board"></div>
+            <div class="victory-screen" id="memo-victory">
+                <h2 class="victory-title">¡Análisis Exitoso!</h2>
+                <p style="color: var(--text-muted); font-size: 14px;">Normativas del abasto dominadas.</p>
+                <button class="btn-restart" onclick="initMemotest()">Jugar de Nuevo</button>
+            </div>
+        </section>
+
+        <!-- VISTA: SIMULADOR -->
+        <section id="view-inspector" class="game-view">
+            <div id="insp-gameplay">
+                <div class="insp-display">
+                    <div class="insp-progress" id="insp-progress">LOTE 1/6</div>
+                    <span id="insp-text">Cargando muestra...</span>
+                </div>
+                <div class="insp-actions" id="insp-actions"></div>
+                <div class="insp-feedback" id="insp-feedback"></div>
+            </div>
+            <div class="victory-screen" id="insp-victory">
+                <h2 class="victory-title" style="color: var(--yellow-tag);">Turno Finalizado</h2>
+                <p id="insp-final-msg" style="color: var(--text-muted); font-size: 14px;"></p>
+                <button class="btn-restart" onclick="initInspector()">Nuevo Turno</button>
+            </div>
+        </section>
     </div>
 
-    <!-- PANTALLA 4: VICTORIA COMÚN -->
-    <div id="screen-win" class="screen">
-        <div class="win-box">
-            <h2 class="win-title">¡TURNO APROBADO!</h2>
-            <p style="color: var(--text-dim); font-size: 15px; margin-bottom: 10px;" id="win-message">Dominas los estándares del mercado.</p>
-            <button class="restart-btn" onclick="goToHome()">Volver al Menú Principal</button>
-        </div>
-    </div>
-
-    <!-- BOTÓN FLOTANTE (FAB) PARA ALTERNAR JUEGOS EN VIVO -->
-    <button class="fab-switch" id="fab" onclick="fastSwitch()" title="Cambiar Desafío">🔄</button>
+    <!-- BOTÓN VOLVER A INICIO -->
+    <button class="fab" id="btn-home" onclick="showHome()" title="Volver al Inicio">
+        🏠
+    </button>
 
     <footer>
         Powered by <span>NovaBit Media Agency</span>
     </footer>
 
     <script>
-        /* ==========================================================================
-           LÓGICA GENERAL Y NAVEGACIÓN
-           ========================================================================== */
-        const screens = {
-            home: document.getElementById('screen-home'),
-            memo: document.getElementById('screen-memo'),
-            inspector: document.getElementById('screen-inspector'),
-            win: document.getElementById('screen-win')
-        };
-        const fab = document.getElementById('fab');
-        let activeGame = null;
+        // --- CONTROL DE PANTALLAS ---
+        const homeScreen = document.getElementById('home-screen');
+        const gameContainer = document.getElementById('game-container');
+        const viewMemo = document.getElementById('view-memotest');
+        const viewInsp = document.getElementById('view-inspector');
+        const moduleTitle = document.getElementById('module-title');
+        const ambient = document.querySelector('.ambient-light');
+        const btnHome = document.getElementById('btn-home');
 
-        function showScreen(key) {
-            Object.values(screens).forEach(s => s.classList.remove('active'));
-            screens[key].classList.add('active');
-            
-            // FAB solo visible cuando se está jugando
-            if (key === 'memo' || key === 'inspector') {
-                fab.style.display = 'flex';
-                activeGame = key;
+        function showHome() {
+            gameContainer.style.display = 'none';
+            btnHome.style.display = 'none';
+            homeScreen.style.display = 'flex';
+            ambient.style.background = "radial-gradient(circle, rgba(255, 204, 0, 0.15) 0%, transparent 70%)";
+        }
+
+        function startGame(mode) {
+            homeScreen.style.display = 'none';
+            gameContainer.style.display = 'flex';
+            btnHome.style.display = 'flex';
+
+            if (mode === 'memotest') {
+                viewInsp.classList.remove('active');
+                viewMemo.classList.add('active');
+                moduleTitle.innerText = "Memoria Visual";
+                moduleTitle.style.color = "var(--success)";
+                ambient.style.background = "radial-gradient(circle, var(--success-glow) 0%, transparent 70%)";
+                initMemotest();
             } else {
-                fab.style.display = 'none';
-                activeGame = null;
+                viewMemo.classList.remove('active');
+                viewInsp.classList.add('active');
+                moduleTitle.innerText = "Inspección Rápida";
+                moduleTitle.style.color = "var(--accent)";
+                ambient.style.background = "radial-gradient(circle, var(--accent-glow) 0%, transparent 70%)";
+                initInspector();
             }
         }
 
-        function goToHome() { showScreen('home'); }
-
-        function goToGame(type) {
-            showScreen(type);
-            type === 'memo' ? startMemo() : startInspector();
-        }
-
-        function fastSwitch() {
-            if (activeGame === 'memo') goToGame('inspector');
-            else if (activeGame === 'inspector') goToGame('memo');
-        }
-
-        /* ==========================================================================
-           MÓDULO 1: MEMOTEST
-           ========================================================================== */
-        // Datos basados estrictamente en el documento adjunto
-        const memoPairs = [
-            { id: 1, text: "Frutillas y Uvas", icon: "🍓" }, { id: 1, text: "Requieren Refrigeración", icon: "❄️" },
-            { id: 2, text: "Banana o Papa", icon: "🍌" }, { id: 2, text: "Temperatura Ambiente", icon: "🌡️" },
-            { id: 3, text: "Primera Calidad", icon: "⭐" }, { id: 3, text: "Apto Venta Directa", icon: "🛒" },
-            { id: 4, text: "Tercera Calidad", icon: "⚠️" }, { id: 4, text: "Industria o Descarte", icon: "🗑️" },
-            { id: 5, text: "Transporte", icon: "🚚" }, { id: 5, text: "Limpio y Cerrado", icon: "🧼" },
-            { id: 6, text: "Contaminación Cruzada", icon: "🦠" }, { id: 6, text: "Afecta a Productos Sanos", icon: "❌" }
+        // --- LÓGICA MEMOTEST ---
+        const memoData = [
+            { id: 1, text: "Frutillas y Uvas", icon: "🍓" }, { id: 1, text: "Requieren Frío", icon: "❄️" },
+            { id: 2, text: "Banana o Papa", icon: "🍌" }, { id: 2, text: "Temp. Ambiente", icon: "🌡️" },
+            { id: 3, text: "Primera Calidad", icon: "⭐" }, { id: 3, text: "Venta Directa", icon: "🛒" },
+            { id: 4, text: "Tercera Calidad", icon: "⚠️" }, { id: 4, text: "A Industria", icon: "🏭" },
+            { id: 5, text: "Transporte", icon: "🚚" }, { id: 5, text: "Cerrado y Limpio", icon: "🧼" },
+            { id: 6, text: "Contaminación", icon: "🦠" }, { id: 6, text: "Deterioro Cruzado", icon: "❌" }
         ];
 
-        let flipped = false, lock = false, c1 = null, c2 = null, matches = 0;
+        let hasFlippedCard = false, lockBoard = false, firstCard, secondCard, memoMatches = 0;
 
-        function startMemo() {
+        function initMemotest() {
             const board = document.getElementById('memo-board');
+            document.getElementById('memo-victory').style.display = 'none';
+            board.style.display = 'grid';
             board.innerHTML = '';
-            matches = 0; [flipped, lock, c1, c2] = [false, false, null, null];
+            memoMatches = 0;
+            [hasFlippedCard, lockBoard, firstCard, secondCard] = [false, false, null, null];
 
-            let shuffled = [...memoPairs].sort(() => Math.random() - 0.5);
-            shuffled.forEach(item => {
+            let shuffled = [...memoData].sort(() => Math.random() - 0.5);
+            shuffled.forEach(data => {
                 const card = document.createElement('div');
-                card.className = 'card';
-                card.dataset.id = item.id;
+                card.classList.add('memo-card');
+                card.dataset.id = data.id;
                 card.innerHTML = `
-                    <div class="card-face card-front">📦</div>
+                    <div class="card-face card-front">🌿</div>
                     <div class="card-face card-back">
-                        <div class="icon">${item.icon}</div>
-                        <div>${item.text}</div>
+                        <div class="card-icon">${data.icon}</div>
+                        <div>${data.text}</div>
                     </div>
                 `;
-                card.onclick = handleCardClick;
+                card.addEventListener('click', flipCard);
                 board.appendChild(card);
             });
         }
 
-        function handleCardClick() {
-            if (lock || this === c1) return;
+        function flipCard() {
+            if (lockBoard || this === firstCard) return;
             this.classList.add('flipped');
-            if (!flipped) { flipped = true; c1 = this; return; }
-            c2 = this; verifyMemo();
+            if (!hasFlippedCard) { hasFlippedCard = true; firstCard = this; return; }
+            secondCard = this;
+            checkMemoMatch();
         }
 
-        function verifyMemo() {
-            if (c1.dataset.id === c2.dataset.id) {
+        function checkMemoMatch() {
+            let isMatch = firstCard.dataset.id === secondCard.dataset.id;
+            if (isMatch) {
                 setTimeout(() => {
-                    c1.classList.add('matched'); c2.classList.add('matched');
-                    resetMemoState(); matches += 2;
-                    if (matches === memoPairs.length) finishGame("Emparejaste todos los criterios técnicos de abasto.");
-                }, 400);
+                    firstCard.classList.add('matched'); secondCard.classList.add('matched');
+                    resetMemoBoard(); memoMatches += 2;
+                    if (memoMatches === memoData.length) {
+                        document.getElementById('memo-board').style.display = 'none';
+                        document.getElementById('memo-victory').style.display = 'block';
+                    }
+                }, 500);
             } else {
-                lock = true;
+                lockBoard = true;
                 setTimeout(() => {
-                    c1.classList.remove('flipped'); c2.classList.remove('flipped');
-                    resetMemoState();
+                    firstCard.classList.remove('flipped'); secondCard.classList.remove('flipped');
+                    resetMemoBoard();
                 }, 1000);
             }
         }
+        function resetMemoBoard() { [hasFlippedCard, lockBoard] = [false, false]; [firstCard, secondCard] = [null, null]; }
 
-        function resetMemoState() { [flipped, lock, c1, c2] = [false, false, null, null]; }
-
-        /* ==========================================================================
-           MÓDULO 2: INSPECTOR
-           ========================================================================== */
-        // Datos basados estrictamente en el documento adjunto
-        const inspScenarios = [
-            { q: "Llegan cajones de frutillas y uvas frescas.", opts: ["Refrigerar", "Galpón (Temp. Amb)"], ans: 0, exp: "Las frutillas y uvas necesitan refrigeración inmediata." },
-            { q: "Lote de hortalizas con pequeños daños físicos.", opts: ["1ra Calidad", "2da Calidad"], ans: 1, exp: "La segunda calidad es para consumo inmediato o menor precio." },
-            { q: "Tomates con descomposición avanzada y mal olor.", opts: ["Venta Minorista", "Industria / Descarte"], ans: 1, exp: "La tercera calidad va a industria o descarte directo." },
-            { q: "Llega un camión abierto, con polvo y mercadería al sol.", opts: ["Descargar", "Rechazar Carga"], ans: 1, exp: "El transporte debe ser cerrado y estar limpio." },
-            { q: "Almacenar frutas que liberan etileno junto a verduras sensibles.", opts: ["Correcto", "Evitar (Incompatible)"], ans: 1, exp: "Genera maduración prematura y pérdidas por deterioro." },
-            { q: "Cajones de bananas entrantes en la recepción.", opts: ["Refrigerar", "Galpón (Temp. Amb)"], ans: 1, exp: "La banana se conserva mejor a temperatura ambiente." }
+        // --- LÓGICA SIMULADOR ---
+        const inspItems = [
+            { text: "Lote de frutillas y uvas recién recibidas en el abasto.", options: ["A Refrigeración", "A Temp. Ambiente"], correct: 0, exp: "Requieren refrigeración obligatoria." },
+            { text: "Lote de manzanas de tamaño homogéneo y color brillante.", options: ["Primera Calidad", "Tercera Calidad"], correct: 0, exp: "Aptas para venta directa." },
+            { text: "Hortalizas con daños visibles por golpes severos.", options: ["Segunda Calidad", "Descarte o Industria"], correct: 1, exp: "No son aptas para consumo inmediato." },
+            { text: "Llega transporte con mercadería; el camión está abierto y sucio.", options: ["Aceptar Carga", "Rechazar Carga"], correct: 1, exp: "Transporte inadecuado acelera el deterioro." },
+            { text: "Lote de bananas y papas ingresando al depósito.", options: ["A Refrigeración", "A Temp. Ambiente"], correct: 1, exp: "El frío daña estos productos específicos." }
         ];
 
-        let curStep = 0, inspPoints = 0, waiting = false;
+        let currentInsp = 0, inspScore = 0, inspActive = true;
 
-        function startInspector() {
-            curStep = 0; inspPoints = 0; waiting = false;
-            renderInspectorStep();
+        function initInspector() {
+            document.getElementById('insp-gameplay').style.display = 'block';
+            document.getElementById('insp-victory').style.display = 'none';
+            currentInsp = 0; inspScore = 0; loadInspItem();
         }
 
-        function renderInspectorStep() {
-            if (curStep >= inspScenarios.length) {
-                finishGame(`Inspección finalizada con ${inspPoints}/${inspScenarios.length} decisiones acertadas.`);
-                return;
-            }
-            const s = inspScenarios[curStep];
-            document.getElementById('insp-counter').innerText = `LOTE ${curStep + 1}/${inspScenarios.length}`;
-            document.getElementById('insp-question').innerText = s.q;
-            document.getElementById('insp-feedback').innerText = '';
-
-            const optsDiv = document.getElementById('insp-options');
-            optsDiv.innerHTML = '';
-            s.opts.forEach((text, i) => {
+        function loadInspItem() {
+            if (currentInsp >= inspItems.length) { endInspector(); return; }
+            const item = inspItems[currentInsp];
+            document.getElementById('insp-text').innerText = item.text;
+            document.getElementById('insp-progress').innerText = `LOTE ${currentInsp + 1}/${inspItems.length}`;
+            
+            const feedback = document.getElementById('insp-feedback');
+            feedback.classList.remove('show');
+            
+            const actionsDiv = document.getElementById('insp-actions');
+            actionsDiv.innerHTML = '';
+            item.options.forEach((opt, index) => {
                 const btn = document.createElement('button');
-                btn.className = 'action-btn';
-                btn.innerText = text;
-                btn.onclick = () => solveScenario(i, btn);
-                optsDiv.appendChild(btn);
+                btn.className = 'btn-action'; btn.innerText = opt;
+                btn.onclick = () => checkInspAnswer(index, btn);
+                actionsDiv.appendChild(btn);
             });
-            waiting = false;
+            inspActive = true;
         }
 
-        function solveScenario(choice, btn) {
-            if (waiting) return; waiting = true;
-            const s = inspScenarios[curStep];
-            const fb = document.getElementById('insp-feedback');
+        function checkInspAnswer(index, btnSelected) {
+            if (!inspActive) return;
+            inspActive = false;
+            const item = inspItems[currentInsp];
+            const btns = document.querySelectorAll('.btn-action');
+            const feedback = document.getElementById('insp-feedback');
 
-            if (choice === s.ans) {
-                btn.style.borderColor = "var(--primary-green)";
-                btn.style.background = "rgba(16, 185, 129, 0.2)";
-                fb.innerHTML = `<span style="color:var(--primary-green)">✓ Correcto:</span> ${s.exp}`;
-                inspPoints++;
+            if (index === item.correct) {
+                btnSelected.style.background = "rgba(46, 213, 115, 0.2)";
+                btnSelected.style.borderColor = "var(--success)";
+                feedback.innerHTML = `<span style="color:var(--success)">✓ Correcto:</span> ${item.exp}`;
+                inspScore++;
             } else {
-                btn.style.borderColor = "#ef4444";
-                btn.style.background = "rgba(239, 68, 68, 0.2)";
-                fb.innerHTML = `<span style="color:#ef4444">✗ Error:</span> ${s.exp}`;
+                btnSelected.style.background = "rgba(255, 71, 87, 0.2)";
+                btnSelected.style.borderColor = "var(--accent)";
+                btns[item.correct].style.borderColor = "var(--success)";
+                feedback.innerHTML = `<span style="color:var(--accent)">✗ Error:</span> ${item.exp}`;
             }
-
-            setTimeout(() => { curStep++; renderInspectorStep(); }, 2600);
+            feedback.classList.add('show');
+            setTimeout(() => { currentInsp++; loadInspItem(); }, 2500);
         }
 
-        function finishGame(msg) {
-            document.getElementById('win-message').innerText = msg;
-            showScreen('win');
+        function endInspector() {
+            document.getElementById('insp-gameplay').style.display = 'none';
+            document.getElementById('insp-victory').style.display = 'block';
+            document.getElementById('insp-final-msg').innerText = `Inspección completada con precisión del ${(inspScore/inspItems.length)*100}%.`;
         }
     </script>
 </body>
