@@ -3,255 +3,319 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simulador: Inspector del Mercado</title>
+    <title>Conexiones del Abasto</title>
     <style>
+        /* Estilos Premium y Variables */
         :root {
-            --primary: #f57c00;
-            --secondary: #ffe0b2;
-            --success: #4caf50;
-            --danger: #f44336;
-            --info: #2196f3;
-            --text: #333;
-            --bg: #eceff1;
+            --bg-color: #0f172a;
+            --card-bg: rgba(255, 255, 255, 0.1);
+            --card-border: rgba(255, 255, 255, 0.2);
+            --accent: #38bdf8;
+            --success: #34d399;
+            --text-main: #f8fafc;
         }
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg);
-            color: var(--text);
+
+        * {
+            box-sizing: border-box;
             margin: 0;
-            padding: 20px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            padding: 0;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background: radial-gradient(circle at top, #1e293b, var(--bg-color));
+            color: var(--text-main);
             min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            overflow-x: hidden;
         }
-        .container {
-            background-color: white;
-            border-radius: 12px;
-            padding: 30px;
-            max-width: 500px;
-            width: 100%;
-            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+
+        header {
             text-align: center;
+            margin-bottom: 30px;
+            animation: fadeInDown 1s ease-out;
         }
+
         h1 {
-            color: var(--primary);
-            font-size: 22px;
+            font-size: 28px;
+            font-weight: 800;
+            background: -webkit-linear-gradient(45deg, var(--accent), #818cf8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
             margin-bottom: 5px;
         }
-        p.subtitle {
-            color: #666;
-            font-size: 14px;
-            margin-bottom: 25px;
+
+        p { color: #94a3b8; font-size: 14px; }
+
+        /* Contenedor del Tablero */
+        .game-board {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            max-width: 500px;
+            width: 100%;
+            perspective: 1000px; /* Necesario para el efecto 3D */
         }
+
+        /* Estructura de la Tarjeta */
         .card {
-            background-color: var(--secondary);
-            border: 2px dashed var(--primary);
-            border-radius: 10px;
-            padding: 30px 20px;
-            font-size: 18px;
-            font-weight: bold;
-            margin-bottom: 20px;
-            min-height: 80px;
+            width: 100%;
+            aspect-ratio: 1 / 1.2;
+            cursor: pointer;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1);
+        }
+
+        .card.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .card.matched {
+            transform: rotateY(180deg) scale(0.95);
+            opacity: 0.8;
+            pointer-events: none;
+        }
+
+        .card-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 16px;
             display: flex;
             align-items: center;
             justify-content: center;
+            text-align: center;
+            padding: 10px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--card-border);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
         }
-        .actions {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
+
+        /* Frente de la tarjeta (Oculto) */
+        .card-front {
+            background: linear-gradient(135deg, rgba(255,255,255,0.05), rgba(255,255,255,0.01));
+            font-size: 40px;
+            color: var(--accent);
+            transition: box-shadow 0.3s ease;
         }
-        .btn {
-            background-color: white;
-            color: var(--text);
-            border: 2px solid #ddd;
-            border-radius: 8px;
-            padding: 15px 10px;
-            cursor: pointer;
+
+        .card:hover .card-front {
+            box-shadow: 0 0 15px rgba(56, 189, 248, 0.5);
+            border-color: rgba(56, 189, 248, 0.5);
+        }
+
+        /* Dorso de la tarjeta (Revelado) */
+        .card-back {
+            background: linear-gradient(135deg, #1e293b, #0f172a);
+            transform: rotateY(180deg);
             font-size: 14px;
-            font-weight: bold;
-            transition: all 0.2s;
+            font-weight: 600;
+            color: var(--text-main);
+            border-color: var(--accent);
         }
-        .btn:hover, .btn:active {
-            background-color: #f5f5f5;
-            transform: scale(0.98);
+
+        .card.matched .card-back {
+            border-color: var(--success);
+            box-shadow: 0 0 20px rgba(52, 211, 153, 0.4);
         }
-        .feedback {
-            font-size: 18px;
-            font-weight: bold;
-            margin-top: 15px;
-            min-height: 25px;
+
+        /* Pantalla de Victoria */
+        .victory-screen {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(15, 23, 42, 0.9);
+            backdrop-filter: blur(8px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease;
+            z-index: 100;
         }
-        .correct { color: var(--success); }
-        .incorrect { color: var(--danger); }
-        #end-screen { display: none; }
+
+        .victory-screen.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .victory-content {
+            transform: scale(0.8);
+            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            text-align: center;
+        }
+
+        .victory-screen.active .victory-content {
+            transform: scale(1);
+        }
+
         .btn-restart {
-            background-color: var(--primary);
-            color: white;
-            border: none;
-            width: 100%;
             margin-top: 20px;
-            grid-column: span 2;
+            padding: 12px 30px;
+            background: linear-gradient(45deg, var(--accent), #3b82f6);
+            border: none;
+            border-radius: 30px;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(56, 189, 248, 0.4);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .btn-restart:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(56, 189, 248, 0.6);
+        }
+
+        /* Animaciones clave */
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <div id="game-screen">
-        <h1>🔍 Inspector de Abasto</h1>
-        <p class="subtitle" id="progress">Lote 1 de 6</p>
-        
-        <div class="card" id="item-card">
-            Cargando lote...
-        </div>
+    <header>
+        <h1>Conexiones del Abasto</h1>
+        <p>Encuentra los pares correctos para organizar el mercado</p>
+    </header>
 
-        <div class="actions" id="action-buttons">
-            <!-- Botones generados dinámicamente -->
-        </div>
-
-        <div class="feedback" id="feedback-text"></div>
+    <div class="game-board" id="board">
+        <!-- Las tarjetas se generan mediante JavaScript -->
     </div>
 
-    <div id="end-screen">
-        <h1>¡Turno finalizado!</h1>
-        <p>Has clasificado todos los lotes.</p>
-        <h2 id="final-score"></h2>
-        <p id="final-message"></p>
-        <button class="btn btn-restart" onclick="startGame()">Volver a trabajar</button>
+    <div class="victory-screen" id="victory">
+        <div class="victory-content">
+            <h1 style="font-size: 40px; margin-bottom: 10px;">¡Excelente!</h1>
+            <p style="font-size: 18px; color: var(--text-main);">Dominas las reglas del mercado de abasto.</p>
+            <button class="btn-restart" onclick="initGame()">Jugar de nuevo</button>
+        </div>
     </div>
-</div>
 
-<script>
-    // Base de datos de situaciones sacadas de la capacitación
-    const items = [
-        {
-            text: "Llegan cajones de frutillas y uvas frescas.",
-            options: ["A la heladera (Refrigeración)", "Al galpón (Temp. Ambiente)"],
-            correct: 0,
-            explanation: "Las frutillas y uvas necesitan refrigeración."
-        },
-        {
-            text: "Llegan cajones de bananas y bolsas de papa.",
-            options: ["A la heladera (Refrigeración)", "Al galpón (Temp. Ambiente)"],
-            correct: 1,
-            explanation: "Se conservan mejor a temperatura ambiente."
-        },
-        {
-            text: "Lote de manzanas con tamaño perfecto, gran color y aptas para venta directa.",
-            options: ["Primera Calidad", "Tercera Calidad"],
-            correct: 0,
-            explanation: "La primera calidad es ideal para venta directa."
-        },
-        {
-            text: "Hortalizas con pequeños detalles, ideales para consumo inmediato o menor precio.",
-            options: ["Segunda Calidad", "Descarte"],
-            correct: 0,
-            explanation: "La segunda calidad es para consumo inmediato."
-        },
-        {
-            text: "Tomates muy golpeados y con signos de deterioro avanzado.",
-            options: ["Primera Calidad", "Tercera Calidad / Descarte"],
-            correct: 1,
-            explanation: "Van a industria o descarte por su mal estado."
-        },
-        {
-            text: "Llega un camión abierto, sucio y con mercadería expuesta al sol.",
-            options: ["Aceptar y descargar", "Rechazar mercadería"],
-            correct: 1,
-            explanation: "El transporte debe garantizar vehículos limpios y cerrados."
-        }
-    ];
+    <script>
+        // Pares basados en el documento de capacitación
+        const cardData = [
+            { id: 1, text: "Frutillas y uvas" },
+            { id: 1, text: "Necesitan refrigeración" },
+            { id: 2, text: "Banana o papa" },
+            { id: 2, text: "Temperatura ambiente" },
+            { id: 3, text: "Primera calidad" },
+            { id: 3, text: "Venta directa" },
+            { id: 4, text: "Tercera calidad" },
+            { id: 4, text: "Industria o descarte" },
+            { id: 5, text: "Transporte" },
+            { id: 5, text: "Limpios y cerrados" },
+            { id: 6, text: "Contaminación cruzada" },
+            { id: 6, text: "Afecta a productos sanos" }
+        ];
 
-    let currentItem = 0;
-    let score = 0;
-    let gameActive = true;
+        let hasFlippedCard = false;
+        let lockBoard = false;
+        let firstCard, secondCard;
+        let matchesFound = 0;
 
-    const itemCard = document.getElementById('item-card');
-    const actionButtons = document.getElementById('action-buttons');
-    const feedbackText = document.getElementById('feedback-text');
-    const progressText = document.getElementById('progress');
-    const gameScreen = document.getElementById('game-screen');
-    const endScreen = document.getElementById('end-screen');
-    const finalScore = document.getElementById('final-score');
-    const finalMessage = document.getElementById('final-message');
+        const board = document.getElementById('board');
+        const victoryScreen = document.getElementById('victory');
 
-    function startGame() {
-        currentItem = 0;
-        score = 0;
-        gameActive = true;
-        gameScreen.style.display = 'block';
-        endScreen.style.display = 'none';
-        feedbackText.innerText = '';
-        loadItem();
-    }
-
-    function loadItem() {
-        if (currentItem >= items.length) {
-            endGame();
-            return;
+        function shuffle() {
+            cardData.sort(() => Math.random() - 0.5);
         }
 
-        const item = items[currentItem];
-        itemCard.innerText = item.text;
-        progressText.innerText = `Lote ${currentItem + 1} de ${items.length}`;
-        feedbackText.innerText = '';
-        
-        actionButtons.innerHTML = '';
-        item.options.forEach((opt, index) => {
-            const btn = document.createElement('button');
-            btn.className = 'btn';
-            btn.innerText = opt;
-            btn.onclick = () => checkAnswer(index);
-            actionButtons.appendChild(btn);
-        });
-        
-        gameActive = true;
-    }
+        function createBoard() {
+            board.innerHTML = '';
+            shuffle();
+            
+            cardData.forEach(data => {
+                const card = document.createElement('div');
+                card.classList.add('card');
+                card.dataset.id = data.id;
 
-    function checkAnswer(selectedIndex) {
-        if (!gameActive) return;
-        gameActive = false; // Prevenir múltiples clics
+                card.innerHTML = `
+                    <div class="card-face card-front">
+                        <span>📦</span>
+                    </div>
+                    <div class="card-face card-back">
+                        <span>${data.text}</span>
+                    </div>
+                `;
 
-        const item = items[currentItem];
-        const buttons = actionButtons.children;
-
-        if (selectedIndex === item.correct) {
-            buttons[selectedIndex].style.borderColor = "var(--success)";
-            buttons[selectedIndex].style.backgroundColor = "#e8f5e9";
-            feedbackText.innerHTML = `<span class="correct">¡Bien hecho!</span> ${item.explanation}`;
-            score++;
-        } else {
-            buttons[selectedIndex].style.borderColor = "var(--danger)";
-            buttons[selectedIndex].style.backgroundColor = "#ffebee";
-            buttons[item.correct].style.borderColor = "var(--success)";
-            feedbackText.innerHTML = `<span class="incorrect">Error.</span> ${item.explanation}`;
+                card.addEventListener('click', flipCard);
+                board.appendChild(card);
+            });
         }
 
-        setTimeout(() => {
-            currentItem++;
-            loadItem();
-        }, 3000); // Muestra la explicación por 3 segundos antes de pasar
-    }
+        function flipCard() {
+            if (lockBoard) return;
+            if (this === firstCard) return;
 
-    function endGame() {
-        gameScreen.style.display = 'none';
-        endScreen.style.display = 'block';
-        finalScore.innerText = `Puntaje: ${score} / ${items.length}`;
-        
-        if (score === items.length) {
-            finalMessage.innerText = "¡Excelente inspector! Dominás los procesos de recepción y clasificación a la perfección.";
-        } else if (score >= items.length / 2) {
-            finalMessage.innerText = "Buen trabajo, pero algunos lotes se te pasaron. ¡A seguir practicando!";
-        } else {
-            finalMessage.innerText = "Hubo muchas pérdidas por mala clasificación. Repasemos el manual y volvamos a intentarlo.";
+            this.classList.add('flipped');
+
+            if (!hasFlippedCard) {
+                hasFlippedCard = true;
+                firstCard = this;
+                return;
+            }
+
+            secondCard = this;
+            checkForMatch();
         }
-    }
 
-    // Iniciar el juego al cargar la página
-    startGame();
-</script>
+        function checkForMatch() {
+            let isMatch = firstCard.dataset.id === secondCard.dataset.id;
 
+            isMatch ? disableCards() : unflipCards();
+        }
+
+        function disableCards() {
+            // Añadir clase match para efecto visual de acierto
+            setTimeout(() => {
+                firstCard.classList.add('matched');
+                secondCard.classList.add('matched');
+                resetBoard();
+                
+                matchesFound += 2;
+                if (matchesFound === cardData.length) {
+                    setTimeout(() => showVictory(), 500);
+                }
+            }, 400); // Pequeño retraso para que el usuario lea la segunda tarjeta
+        }
+
+        function unflipCards() {
+            lockBoard = true;
+            setTimeout(() => {
+                firstCard.classList.remove('flipped');
+                secondCard.classList.remove('flipped');
+                resetBoard();
+            }, 1200); // 1.2 segundos para memorizar
+        }
+
+        function resetBoard() {
+            [hasFlippedCard, lockBoard] = [false, false];
+            [firstCard, secondCard] = [null, null];
+        }
+
+        function showVictory() {
+            victoryScreen.classList.add('active');
+        }
+
+        function initGame() {
+            matchesFound = 0;
+            victoryScreen.classList.remove('active');
+            resetBoard();
+            createBoard();
+        }
+
+        // Iniciar el juego al cargar la página
+        initGame();
+    </script>
 </body>
 </html>
