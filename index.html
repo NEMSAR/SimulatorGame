@@ -3,118 +3,142 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>CONEXIÓN ABASTO // EL DESAFÍO</title>
+    <title>Sistema de Control de Inocuidad</title>
     <style>
-        /* CONFIGURACIÓN BRUTALISTA */
+        /* ESTÉTICA CLEAN LAB / CIENTÍFICA */
         :root {
-            --bg: #fff;
-            --primary: #00ff66; /* Verde Neón */
-            --secondary: #00ffff; /* Cian Neón */
-            --accent: #ff0055; /* Rosa Neón */
-            --dark: #000000;
-            --card-front-bg: #ffe600; /* Amarillo Brutal */
+            --bg-app: #f4f7f6;
+            --surface: #ffffff;
+            --primary: #0284c7; /* Azul Médico/Científico */
+            --primary-light: #e0f2fe;
+            --success: #10b981; /* Verde Bioseguridad */
+            --success-light: #d1fae5;
+            --danger: #ef4444; /* Rojo Alerta */
+            --danger-light: #fee2e2;
+            --text-dark: #1e293b;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
         }
 
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Arial Black', 'Impact', sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             -webkit-user-select: none;
             user-select: none;
         }
 
-        /* FONTO ANIMADO INTERACTIVO */
         body {
-            background-color: #fafafa;
-            background-image: radial-gradient(var(--dark) 15%, transparent 16%);
-            background-size: 24px 24px;
-            color: var(--dark);
+            background-color: var(--bg-app);
+            color: var(--text-dark);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 15px;
             overflow-x: hidden;
-            animation: backgroundMove 4s linear infinite;
         }
 
-        @keyframes backgroundMove {
-            0% { background-position: 0 0; }
-            100% { background-position: 24px 24px; }
-        }
-
-        /* HEADER TOTALMENTE LLAMATIVO */
+        /* HEADER & LOGO */
         header {
-            text-align: center;
-            margin-top: 10px;
-            margin-bottom: 25px;
             width: 100%;
-            max-width: 450px;
+            background: var(--surface);
+            padding: 20px;
+            text-align: center;
+            border-bottom: 1px solid var(--border);
+            box-shadow: var(--shadow);
+            z-index: 10;
         }
 
-        /* Animación en bucle tipo pulso/glitch brutalista */
-        .marquee-title {
-            background: var(--dark);
+        .logo-container {
+            margin-bottom: 10px;
+            height: 50px; /* Ajusta la altura según tu logo */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .logo-container img {
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+        /* Puedes poner el logo como texto provisorio si el link está vacío */
+        .logo-placeholder {
+            font-size: 20px;
+            font-weight: 800;
             color: var(--primary);
-            padding: 12px;
-            font-size: 26px;
+            letter-spacing: 1px;
+        }
+
+        h1 {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-dark);
             text-transform: uppercase;
-            border: 4px solid var(--dark);
-            box-shadow: 6px 6px 0px var(--accent);
-            transform: rotate(-2deg);
-            animation: titlePulse 2s infinite alternate cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            letter-spacing: 0.5px;
         }
 
-        @keyframes titlePulse {
-            0% { transform: rotate(-2deg) scale(0.98); box-shadow: 6px 6px 0px var(--accent); }
-            100% { transform: rotate(1deg) scale(1.02); box-shadow: -6px 6px 0px var(--secondary); }
-        }
-
-        .subtitle {
-            background: var(--bg);
-            color: var(--dark);
+        .module-badge {
             display: inline-block;
-            margin-top: 12px;
-            padding: 6px 12px;
-            font-size: 13px;
-            font-weight: bold;
-            border: 3px solid var(--dark);
-            box-shadow: 4px 4px 0px var(--dark);
-            transform: rotate(1deg);
+            background: var(--primary-light);
+            color: var(--primary);
+            font-size: 11px;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 12px;
+            margin-top: 5px;
+            text-transform: uppercase;
         }
 
-        /* TABLERO DE JUEGO OPTIMIZADO PARA MÓVILES */
-        .game-board {
+        /* CONTENEDOR PRINCIPAL */
+        main {
+            flex: 1;
+            width: 100%;
+            max-width: 500px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .game-view {
+            display: none;
+            width: 100%;
+            animation: fadeIn 0.4s ease-out;
+        }
+
+        .game-view.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ESTILOS: MÓDULO MEMORIA (MEMOTEST) */
+        .memo-board {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-            max-width: 450px;
-            width: 100%;
+            gap: 12px;
             perspective: 1000px;
-            margin-bottom: 20px;
         }
 
-        /* TARJETAS RÍGIDAS CON SOMBRAS DURAS */
-        .card {
+        .memo-card {
             width: 100%;
-            aspect-ratio: 1 / 1.15;
+            aspect-ratio: 1 / 1.2;
             cursor: pointer;
             position: relative;
             transform-style: preserve-3d;
-            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transition: transform 0.5s cubic-bezier(0.4, 0.0, 0.2, 1);
         }
 
-        /* Evita el lag de toque en móviles */
-        .card * { pointer-events: none; }
-
-        .card.flipped {
-            transform: rotateY(180deg);
-        }
-
-        .card.matched {
-            transform: rotateY(180deg) scale(0.92);
-            opacity: 0.4;
+        .memo-card.flipped { transform: rotateY(180deg); }
+        .memo-card.matched {
+            transform: rotateY(180deg) scale(0.95);
+            opacity: 0.6;
         }
 
         .card-face {
@@ -122,236 +146,393 @@
             width: 100%;
             height: 100%;
             backface-visibility: hidden;
-            border: 4px solid var(--dark);
-            border-radius: 0px; /* Estilo brutalista: bordes rectos y agresivos */
+            border-radius: 8px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 6px;
+            padding: 10px;
             text-align: center;
+            box-shadow: var(--shadow);
         }
 
-        /* Frente de la tarjeta */
         .card-front {
-            background: var(--card-front-bg);
-            box-shadow: 4px 4px 0px var(--dark);
-            font-size: 32px;
+            background: var(--surface);
+            border: 2px solid var(--primary-light);
+            color: var(--primary);
+            font-size: 28px;
         }
 
-        .card:active .card-front {
-            transform: translate(2px, 2px);
-            box-shadow: 2px 2px 0px var(--dark);
-        }
-
-        /* Dorso de la tarjeta revelado */
         .card-back {
+            background: var(--surface);
+            border: 2px solid var(--success);
             transform: rotateY(180deg);
-            font-size: 11px;
-            font-weight: 900;
-            line-height: 1.2;
-            background: var(--secondary);
-            box-shadow: -4px 4px 0px var(--dark);
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-dark);
         }
 
-        .card-back .emoji-inside {
-            font-size: 24px;
-            margin-bottom: 4px;
+        .card-icon { font-size: 24px; margin-bottom: 5px; }
+
+        /* ESTILOS: MÓDULO INSPECTOR (SIMULADOR) */
+        .insp-progress {
+            text-align: center;
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-bottom: 15px;
+            font-weight: 600;
         }
 
-        /* CONFIGURACIONES DE COLOR SEGÚN PAR ACCERTADO */
-        .p1 { background-color: #ff99f1 !important; } /* Frutillas */
-        .p2 { background-color: #ffdf79 !important; } /* Bananas */
-        .p3 { background-color: #9bf6ff !important; } /* Primera */
-        .p4 { background-color: #ffadad !important; } /* Tercera */
-        .p5 { background-color: #caffbf !important; } /* Transporte */
-        .p6 { background-color: #fdffb6 !important; } /* Contaminación */
-
-        /* PANTALLA DE VICTORIA BRUTALISTA */
-        .victory-screen {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: var(--accent);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s ease;
-            z-index: 100;
-            border: 10px solid var(--dark);
-        }
-
-        .victory-screen.active {
-            opacity: 1;
-            pointer-events: all;
-        }
-
-        .victory-box {
-            background: #fff;
-            border: 6px solid var(--dark);
+        .insp-display {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
             padding: 30px 20px;
             text-align: center;
-            max-width: 400px;
-            width: 100%;
-            box-shadow: 10px 10px 0px var(--dark);
-            transform: rotate(-1deg);
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-dark);
+            box-shadow: var(--shadow);
+            min-height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .insp-display::before {
+            content: 'MUESTRA EN ANÁLISIS';
+            position: absolute;
+            top: -10px;
+            background: var(--primary);
+            color: white;
+            font-size: 10px;
+            padding: 3px 8px;
+            border-radius: 10px;
+            font-weight: bold;
+        }
+
+        .insp-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .btn-action {
+            background: var(--surface);
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            padding: 15px;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-dark);
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: var(--shadow);
+        }
+
+        .btn-action:active { transform: scale(0.96); }
+        
+        .insp-feedback {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 14px;
+            font-weight: 500;
+            min-height: 40px;
+        }
+
+        /* PANTALLA COMÚN DE VICTORIA */
+        .victory-screen {
+            display: none;
+            text-align: center;
+            background: var(--surface);
+            padding: 30px 20px;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--success-light);
+            animation: fadeIn 0.4s ease-out;
         }
 
         .btn-restart {
-            margin-top: 25px;
-            width: 100%;
-            padding: 16px;
+            margin-top: 20px;
+            padding: 12px 24px;
             background: var(--primary);
-            color: var(--dark);
-            border: 4px solid var(--dark);
-            font-size: 18px;
-            font-weight: 900;
-            text-transform: uppercase;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 14px;
             cursor: pointer;
-            box-shadow: 5px 5px 0px var(--dark);
+            width: 100%;
         }
 
-        .btn-restart:active {
-            transform: translate(3px, 3px);
-            box-shadow: 2px 2px 0px var(--dark);
+        /* BOTÓN FLOTANTE (FAB) */
+        .fab {
+            position: fixed;
+            bottom: 60px; /* Espacio para el footer */
+            right: 20px;
+            width: 56px;
+            height: 56px;
+            border-radius: 28px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            box-shadow: 0 4px 12px rgba(2, 132, 199, 0.4);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            z-index: 100;
+            transition: transform 0.2s;
         }
+
+        .fab:active { transform: scale(0.9); }
+
+        /* FOOTER DE AGENCIA */
+        footer {
+            width: 100%;
+            text-align: center;
+            padding: 15px;
+            font-size: 11px;
+            color: var(--text-muted);
+            background: var(--surface);
+            border-top: 1px solid var(--border);
+        }
+
+        footer span {
+            font-weight: 700;
+            color: var(--primary);
+        }
+
     </style>
 </head>
 <body>
 
     <header>
-        <div class="marquee-title">💥 CONTROL DE ABASTO 💥</div>
-        <div class="subtitle">CONECTÁ LOS PARES DE LA CADENA ANTES QUE SE DETERIOREN</div>
+        <div class="logo-container">
+            <div class="logo-placeholder">🔬 FOODCHECK</div>
+        </div>
+        <h1>Control de Inocuidad</h1>
+        <div class="module-badge" id="module-title">Módulo: Memoria</div>
     </header>
 
-    <div class="game-board" id="board">
-        </div>
+    <main>
+        <section id="view-memotest" class="game-view active">
+            <div class="memo-board" id="memo-board"></div>
+            <div class="victory-screen" id="memo-victory">
+                <h2 style="color: var(--success); margin-bottom: 10px;">¡Análisis Completado!</h2>
+                <p>Has emparejado todos los criterios de calidad.</p>
+                <button class="btn-restart" onclick="initMemotest()">Reiniciar Módulo</button>
+            </div>
+        </section>
 
-    <div class="victory-screen" id="victory">
-        <div class="victory-box">
-            <h1 style="-webkit-text-fill-color: initial; font-size: 36px; margin-bottom: 10px;">¡TURNO COMPLETO!</h1>
-            <p style="color: var(--dark); font-size: 16px; font-weight: bold;">Clasificaste y resguardaste la mercadería con éxito absoluto.</p>
-            <button class="btn-restart" onclick="initGame()">VOLVER A EMPEZAR</button>
-        </div>
-    </div>
+        <section id="view-inspector" class="game-view">
+            <div id="insp-gameplay">
+                <div class="insp-progress" id="insp-progress">Lote 1 / 6</div>
+                <div class="insp-display" id="insp-display">Cargando muestra...</div>
+                <div class="insp-actions" id="insp-actions"></div>
+                <div class="insp-feedback" id="insp-feedback"></div>
+            </div>
+            <div class="victory-screen" id="insp-victory">
+                <h2 style="color: var(--primary); margin-bottom: 10px;">¡Turno Finalizado!</h2>
+                <p id="insp-final-msg"></p>
+                <button class="btn-restart" onclick="initInspector()">Siguiente Turno</button>
+            </div>
+        </section>
+    </main>
+
+    <button class="fab" id="switch-btn" onclick="toggleGame()" title="Cambiar Simulador">
+        🔄
+    </button>
+
+    <footer>
+        Powered by <span>NovaBit Media Agency</span>
+    </footer>
 
     <script>
-        // Datos estructurados en pares exactos basados en el documento técnico
-        const cardData = [
-            { id: 1, text: "Frutillas y Uvas", emoji: "🍓🍇", class: "p1" },
-            { id: 1, text: "Requieren Refrigeración", emoji: "❄️", class: "p1" },
-            
-            { id: 2, text: "Banana o Papa", emoji: "🍌🥔", class: "p2" },
-            { id: 2, text: "Temperatura Ambiente", emoji: "🌡️", class: "p2" },
-            
-            { id: 3, text: "Primera Calidad", emoji: "🌟", class: "p3" },
-            { id: 3, text: "Aptos Venta Directa", emoji: "🛒", class: "p3" },
-            
-            { id: 4, text: "Tercera Calidad", emoji: "⚠️", class: "p4" },
-            { id: 4, text: "Industria o Descarte", emoji: "🏭", class: "p4" },
-            
-            { id: 5, text: "Transporte Ideal", emoji: "🚚", class: "p5" },
-            { id: 5, text: "Vehículo Limpio y Cerrado", emoji: "🧼", class: "p5" },
-            
-            { id: 6, text: "Contaminación Cruzada", emoji: "🦠", class: "p6" },
-            { id: 6, text: "Afecta a Productos Sanos", emoji: "❌", class: "p6" }
-        ];
+        // --- CONTROLADOR GENERAL ---
+        let currentMode = 'memotest';
+        const viewMemo = document.getElementById('view-memotest');
+        const viewInsp = document.getElementById('view-inspector');
+        const moduleTitle = document.getElementById('module-title');
 
-        let hasFlippedCard = false;
-        let lockBoard = false;
-        let firstCard, secondCard;
-        let matchesFound = 0;
-
-        const board = document.getElementById('board');
-        const victoryScreen = document.getElementById('victory');
-
-        function shuffle() {
-            cardData.sort(() => Math.random() - 0.5);
+        function toggleGame() {
+            if (currentMode === 'memotest') {
+                currentMode = 'inspector';
+                viewMemo.classList.remove('active');
+                viewInsp.classList.add('active');
+                moduleTitle.innerText = "Módulo: Inspección Rápida";
+                initInspector();
+            } else {
+                currentMode = 'memotest';
+                viewInsp.classList.remove('active');
+                viewMemo.classList.add('active');
+                moduleTitle.innerText = "Módulo: Memoria";
+                initMemotest();
+            }
         }
 
-        function createBoard() {
-            board.innerHTML = '';
-            shuffle();
-            
-            cardData.forEach(data => {
-                const card = document.createElement('div');
-                card.classList.add('card');
-                card.dataset.id = data.id;
+        // --- LÓGICA DEL MEMOTEST ---
+        const memoData = [
+            { id: 1, text: "Frutillas y Uvas", icon: "🍓" }, { id: 1, text: "Requieren Refrigeración", icon: "❄️" },
+            { id: 2, text: "Banana o Papa", icon: "🍌" }, { id: 2, text: "Temperatura Ambiente", icon: "🌡️" },
+            { id: 3, text: "Primera Calidad", icon: "⭐" }, { id: 3, text: "Aptos Venta Directa", icon: "🛒" },
+            { id: 4, text: "Tercera Calidad", icon: "⚠️" }, { id: 4, text: "Industria o Descarte", icon: "🗑️" },
+            { id: 5, text: "Transporte", icon: "🚚" }, { id: 5, text: "Limpios y Cerrados", icon: "🧼" },
+            { id: 6, text: "Contaminación Cruzada", icon: "🦠" }, { id: 6, text: "Afecta a Productos Sanos", icon: "❌" }
+        ];
 
+        let hasFlippedCard = false, lockBoard = false;
+        let firstCard, secondCard;
+        let memoMatches = 0;
+
+        function initMemotest() {
+            const board = document.getElementById('memo-board');
+            document.getElementById('memo-victory').style.display = 'none';
+            board.style.display = 'grid';
+            board.innerHTML = '';
+            memoMatches = 0;
+            [hasFlippedCard, lockBoard, firstCard, secondCard] = [false, false, null, null];
+
+            let shuffled = [...memoData].sort(() => Math.random() - 0.5);
+            
+            shuffled.forEach(data => {
+                const card = document.createElement('div');
+                card.classList.add('memo-card');
+                card.dataset.id = data.id;
                 card.innerHTML = `
-                    <div class="card-face card-front">
-                        <span>📦</span>
-                    </div>
-                    <div class="card-face card-back ${data.class}">
-                        <div class="emoji-inside">${data.emoji}</div>
+                    <div class="card-face card-front">🔬</div>
+                    <div class="card-face card-back">
+                        <div class="card-icon">${data.icon}</div>
                         <div>${data.text}</div>
                     </div>
                 `;
-
                 card.addEventListener('click', flipCard);
                 board.appendChild(card);
             });
         }
 
         function flipCard() {
-            if (lockBoard) return;
-            if (this === firstCard) return;
-
+            if (lockBoard || this === firstCard) return;
             this.classList.add('flipped');
-
             if (!hasFlippedCard) {
                 hasFlippedCard = true;
                 firstCard = this;
                 return;
             }
-
             secondCard = this;
-            checkForMatch();
+            checkMemoMatch();
         }
 
-        function checkForMatch() {
+        function checkMemoMatch() {
             let isMatch = firstCard.dataset.id === secondCard.dataset.id;
-            isMatch ? disableCards() : unflipCards();
+            if (isMatch) {
+                setTimeout(() => {
+                    firstCard.classList.add('matched');
+                    secondCard.classList.add('matched');
+                    resetMemoBoard();
+                    memoMatches += 2;
+                    if (memoMatches === memoData.length) {
+                        document.getElementById('memo-board').style.display = 'none';
+                        document.getElementById('memo-victory').style.display = 'block';
+                    }
+                }, 400);
+            } else {
+                lockBoard = true;
+                setTimeout(() => {
+                    firstCard.classList.remove('flipped');
+                    secondCard.classList.remove('flipped');
+                    resetMemoBoard();
+                }, 1000);
+            }
         }
 
-        function disableCards() {
-            setTimeout(() => {
-                firstCard.classList.add('matched');
-                secondCard.classList.add('matched');
-                resetBoard();
-                
-                matchesFound += 2;
-                if (matchesFound === cardData.length) {
-                    setTimeout(() => victoryScreen.classList.add('active'), 400);
-                }
-            }, 300);
-        }
-
-        function unflipCards() {
-            lockBoard = true;
-            setTimeout(() => {
-                firstCard.classList.remove('flipped');
-                secondCard.classList.remove('flipped');
-                resetBoard();
-            }, 1000);
-        }
-
-        function resetBoard() {
+        function resetMemoBoard() {
             [hasFlippedCard, lockBoard] = [false, false];
             [firstCard, secondCard] = [null, null];
         }
 
-        function initGame() {
-            matchesFound = 0;
-            victoryScreen.classList.remove('active');
-            resetBoard();
-            createBoard();
+        // --- LÓGICA DEL SIMULADOR DE INSPECTOR ---
+        const inspItems = [
+            { text: "Llegan cajones de frutillas frescas.", options: ["Refrigerar", "Temp. Ambiente"], correct: 0, exp: "Las frutillas requieren cadena de frío." },
+            { text: "Lote de manzanas de tamaño perfecto y color brillante.", options: ["1ra Calidad", "3ra Calidad"], correct: 0, exp: "Óptimas para venta directa." },
+            { text: "Hortalizas con daños visibles por golpes severos.", options: ["Segunda Calidad", "Descarte / Industria"], correct: 1, exp: "Riesgo de deterioro avanzado." },
+            { text: "Llega transporte cerrado pero con interior sucio.", options: ["Aceptar", "Rechazar"], correct: 1, exp: "La limpieza es innegociable." },
+            { text: "Almacenaje de vegetales limpios junto a carnes crudas.", options: ["Permitido", "Riesgo Cruzado"], correct: 1, exp: "Genera contaminación cruzada inminente." },
+            { text: "Bolsas de papa llegando del campo.", options: ["Refrigerar", "Temp. Ambiente"], correct: 1, exp: "La papa no requiere refrigeración." }
+        ];
+
+        let currentInsp = 0;
+        let inspScore = 0;
+        let inspActive = true;
+
+        function initInspector() {
+            document.getElementById('insp-gameplay').style.display = 'block';
+            document.getElementById('insp-victory').style.display = 'none';
+            currentInsp = 0;
+            inspScore = 0;
+            loadInspItem();
         }
 
-        initGame();
+        function loadInspItem() {
+            if (currentInsp >= inspItems.length) {
+                endInspector();
+                return;
+            }
+            const item = inspItems[currentInsp];
+            document.getElementById('insp-display').innerText = item.text;
+            document.getElementById('insp-progress').innerText = `Muestra ${currentInsp + 1} de ${inspItems.length}`;
+            document.getElementById('insp-feedback').innerHTML = '';
+            
+            const actionsDiv = document.getElementById('insp-actions');
+            actionsDiv.innerHTML = '';
+            item.options.forEach((opt, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'btn-action';
+                btn.innerText = opt;
+                btn.onclick = () => checkInspAnswer(index, btn);
+                actionsDiv.appendChild(btn);
+            });
+            inspActive = true;
+        }
+
+        function checkInspAnswer(index, btnSelected) {
+            if (!inspActive) return;
+            inspActive = false;
+            
+            const item = inspItems[currentInsp];
+            const btns = document.querySelectorAll('.btn-action');
+            const feedback = document.getElementById('insp-feedback');
+
+            if (index === item.correct) {
+                btnSelected.style.borderColor = "var(--success)";
+                btnSelected.style.backgroundColor = "var(--success-light)";
+                feedback.innerHTML = `<span style="color:var(--success)">✓ Correcto:</span> ${item.exp}`;
+                inspScore++;
+            } else {
+                btnSelected.style.borderColor = "var(--danger)";
+                btnSelected.style.backgroundColor = "var(--danger-light)";
+                btns[item.correct].style.borderColor = "var(--success)";
+                feedback.innerHTML = `<span style="color:var(--danger)">✗ Error:</span> ${item.exp}`;
+            }
+
+            setTimeout(() => {
+                currentInsp++;
+                loadInspItem();
+            }, 2500);
+        }
+
+        function endInspector() {
+            document.getElementById('insp-gameplay').style.display = 'none';
+            document.getElementById('insp-victory').style.display = 'block';
+            const msg = document.getElementById('insp-final-msg');
+            msg.innerText = `Precisión del control: ${inspScore} / ${inspItems.length} muestras analizadas correctamente.`;
+        }
+
+        // Inicializar el primer juego al cargar
+        initMemotest();
     </script>
 </body>
 </html>
